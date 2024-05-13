@@ -5,7 +5,7 @@
 
 Game::Game()
 {
-    state = GameState::MAIN_MENU;
+    state = GameState::CREDITS;
     scene = nullptr;
     img_menu = nullptr;
     maze_img = nullptr;
@@ -99,6 +99,8 @@ void Game::FinishPlay()
 void Game::playCreditsAnimation()
 {
    //play animation
+    WaitTime(5);
+    animationFinished = true;
 }
 AppStatus Game::Update()
 {
@@ -109,7 +111,10 @@ AppStatus Game::Update()
     {
         case GameState::CREDITS:
             playCreditsAnimation();
-            state = GameState::MAIN_MENU;
+            if (animationFinished) {
+                state = GameState::MAIN_MENU;
+            }
+            else { animationFinished = false; }
             break;
         case GameState::MAIN_MENU: 
             if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;
@@ -150,6 +155,9 @@ void Game::Render()
         case GameState::PLAYING:
             scene->Render();
             DrawTextureEx(*maze_img, Vector2(), 0, 2, { 255,255,255,150 });
+            break;
+        case GameState::CREDITS:
+            //playCreditsAnimation();
             break;
     }
     
