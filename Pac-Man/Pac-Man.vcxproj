@@ -162,6 +162,7 @@
     <ClCompile Include="source\Scene.cpp" />
     <ClCompile Include="source\Sprite.cpp" />
     <ClCompile Include="source\StaticImage.cpp" />
+    <ClCompile Include="source\Text.cpp" />
     <ClCompile Include="source\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +180,7 @@
     <ClInclude Include="source\Scene.h" />
     <ClInclude Include="source\Sprite.h" />
     <ClInclude Include="source\StaticImage.h" />
+    <ClInclude Include="source\Text.h" />
     <ClInclude Include="source\TileMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

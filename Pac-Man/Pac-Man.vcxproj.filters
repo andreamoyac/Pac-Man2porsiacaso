@@ -75,6 +75,9 @@
     <ClCompile Include="source\Red.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="source\Text.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Globals.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="source\Enemy.h">
       <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Text.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

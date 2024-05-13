@@ -7,6 +7,10 @@ Scene::Scene()
 	player = nullptr;
     level = nullptr;
 	
+	font1 = nullptr;
+	font2 = nullptr;
+	font3 = nullptr;
+	
 	camera.target = { 0, 0 };				//Center of the screen
 	camera.offset = { 0, MARGIN_GUI_Y };	//Offset from the target (center of the screen)
 	camera.rotation = 0.0f;					
@@ -33,6 +37,21 @@ Scene::~Scene()
 		delete obj;
 	}
 	objects.clear();
+	if (font1 != nullptr)
+	{
+		delete font1;
+		font1 = nullptr;
+	}
+	if (font2 != nullptr)
+	{
+		delete font2;
+		font2 = nullptr;
+	}
+	if (font3 != nullptr)
+	{
+		delete font3;
+		font3 = nullptr;
+	}
 }
 AppStatus Scene::Init()
 {
@@ -120,7 +139,47 @@ AppStatus Scene::Init()
 	
 	player->SetTileMap(level);
 
-    return AppStatus::OK;
+	//Create text font 1
+	font1 = new Text();
+	if (font1 == nullptr)
+	{
+		LOG("Failed to allocate memory for font 1");
+		return AppStatus::ERROR;
+	}
+	//Initialise text font 1
+	if (font1->Initialise(Resource::IMG_FONT1, "images/font8x8.png", ' ', 8) != AppStatus::OK)
+	{
+		LOG("Failed to initialise Level");
+		return AppStatus::ERROR;
+	}
+	//Create text font 2
+	font2 = new Text();
+	if (font2 == nullptr)
+	{
+		LOG("Failed to allocate memory for font 2");
+		return AppStatus::ERROR;
+	}
+	//Initialise text font 2
+	if (font2->Initialise(Resource::IMG_FONT2, "images/font16x16.png", (char)0, 16) != AppStatus::OK)
+	{
+		LOG("Failed to initialise Level");
+		return AppStatus::ERROR;
+	}
+	//Create text font 3
+	font3 = new Text();
+	if (font3 == nullptr)
+	{
+		LOG("Failed to allocate memory for font 3");
+		return AppStatus::ERROR;
+	}
+	//Initialise text font 3
+	if (font3->Initialise(Resource::IMG_FONT3, "images/font12x12.png", ' ', 12) != AppStatus::OK)
+	{
+		LOG("Failed to initialise Level");
+		return AppStatus::ERROR;
+	}
+
+	return AppStatus::OK;
 }
 AppStatus Scene::LoadLevel(int stage)
 {
