@@ -5,7 +5,7 @@
 
 Game::Game()
 {
-    state = GameState::CREDITS;
+    state = GameState::INTRO;
     scene = nullptr;
     img_menu = nullptr;
     maze_img = nullptr;
@@ -100,6 +100,12 @@ void Game::playCreditsAnimation()
 {
    //play animation
     WaitTime(5);
+    animationFinished2 = true;
+}
+void Game::playIntroAnimation()
+{
+    //play animation
+    WaitTime(5);
     animationFinished = true;
 }
 AppStatus Game::Update()
@@ -109,12 +115,19 @@ AppStatus Game::Update()
 
     switch (state)
     {
-        case GameState::CREDITS:
-            playCreditsAnimation();
+        case GameState::INTRO:
+            playIntroAnimation();
             if (animationFinished) {
-                state = GameState::MAIN_MENU;
+            state = GameState::MAIN_MENU;
             }
             else { animationFinished = false; }
+            break;
+        case GameState::CREDITS:
+            playCreditsAnimation();
+            if (animationFinished2) {
+                state = GameState::MAIN_MENU;
+            }
+            else { animationFinished2 = false; }
             break;
         case GameState::MAIN_MENU: 
             if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;

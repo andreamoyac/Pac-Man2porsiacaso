@@ -2,7 +2,7 @@
 #include "Globals.h"
 #include "Scene.h"
 
-enum class GameState { MAIN_MENU, PLAYING, CREDITS };
+enum class GameState { MAIN_MENU, PLAYING, CREDITS, INTRO };
 
 class Game
 {
@@ -15,6 +15,7 @@ public:
     void Render();
     void Cleanup();
     void playCreditsAnimation();
+    void playIntroAnimation();
 
 private:
     AppStatus BeginPlay();
@@ -28,6 +29,7 @@ private:
     const Texture2D *img_menu;
     const Texture2D* maze_img;
     bool animationFinished;
+    bool animationFinished2;
 
     //To work with original game units and then scale the result
     RenderTexture2D target;
