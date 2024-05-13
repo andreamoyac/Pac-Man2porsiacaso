@@ -96,6 +96,10 @@ void Game::FinishPlay()
     delete scene;
     scene = nullptr;
 }
+void Game::playCreditsAnimation()
+{
+   //play animation
+}
 AppStatus Game::Update()
 {
     //Check if user attempts to close the window, either by clicking the close button or by pressing Alt+F4
@@ -103,6 +107,10 @@ AppStatus Game::Update()
 
     switch (state)
     {
+        case GameState::CREDITS:
+            playCreditsAnimation();
+            state = GameState::MAIN_MENU;
+            break;
         case GameState::MAIN_MENU: 
             if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;
             if (IsKeyPressed(KEY_ENTER))
