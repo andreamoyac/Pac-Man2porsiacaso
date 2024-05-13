@@ -14,6 +14,7 @@ public:
     AppStatus Update();
     void Render();
     void Cleanup();
+    void playCreditsAnimation();
 
 private:
     AppStatus BeginPlay();
