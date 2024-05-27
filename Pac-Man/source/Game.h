@@ -28,8 +28,8 @@ private:
     Scene *scene;
     const Texture2D *img_menu;
     const Texture2D* maze_img;
-    bool animationFinished;
-    bool animationFinished2;
+    bool animationFinished=false;
+    bool animationFinished2=false;
 
     //To work with original game units and then scale the result
     RenderTexture2D target;

@@ -139,45 +139,45 @@ AppStatus Scene::Init()
 	
 	player->SetTileMap(level);
 
-	//Create text font 1
-	font1 = new Text();
-	if (font1 == nullptr)
-	{
-		LOG("Failed to allocate memory for font 1");
-		return AppStatus::ERROR;
-	}
-	//Initialise text font 1
-	if (font1->Initialise(Resource::IMG_FONT1, "images/font8x8.png", ' ', 8) != AppStatus::OK)
-	{
-		LOG("Failed to initialise Level");
-		return AppStatus::ERROR;
-	}
-	//Create text font 2
-	font2 = new Text();
-	if (font2 == nullptr)
-	{
-		LOG("Failed to allocate memory for font 2");
-		return AppStatus::ERROR;
-	}
-	//Initialise text font 2
-	if (font2->Initialise(Resource::IMG_FONT2, "images/font16x16.png", (char)0, 16) != AppStatus::OK)
-	{
-		LOG("Failed to initialise Level");
-		return AppStatus::ERROR;
-	}
-	//Create text font 3
-	font3 = new Text();
-	if (font3 == nullptr)
-	{
-		LOG("Failed to allocate memory for font 3");
-		return AppStatus::ERROR;
-	}
-	//Initialise text font 3
-	if (font3->Initialise(Resource::IMG_FONT3, "images/font12x12.png", ' ', 12) != AppStatus::OK)
-	{
-		LOG("Failed to initialise Level");
-		return AppStatus::ERROR;
-	}
+	////Create text font 1
+	//font1 = new Text();
+	//if (font1 == nullptr)
+	//{
+	//	LOG("Failed to allocate memory for font 1");
+	//	return AppStatus::ERROR;
+	//}
+	////Initialise text font 1
+	//if (font1->Initialise(Resource::IMG_FONT1, "images/font8x8.png", ' ', 8) != AppStatus::OK)
+	//{
+	//	LOG("Failed to initialise Level");
+	//	return AppStatus::ERROR;
+	//}
+	////Create text font 2
+	//font2 = new Text();
+	//if (font2 == nullptr)
+	//{
+	//	LOG("Failed to allocate memory for font 2");
+	//	return AppStatus::ERROR;
+	//}
+	////Initialise text font 2
+	//if (font2->Initialise(Resource::IMG_FONT2, "images/font16x16.png", (char)0, 16) != AppStatus::OK)
+	//{
+	//	LOG("Failed to initialise Level");
+	//	return AppStatus::ERROR;
+	//}
+	////Create text font 3
+	//font3 = new Text();
+	//if (font3 == nullptr)
+	//{
+	//	LOG("Failed to allocate memory for font 3");
+	//	return AppStatus::ERROR;
+	//}
+	////Initialise text font 3
+	//if (font3->Initialise(Resource::IMG_FONT3, "images/font12x12.png", ' ', 12) != AppStatus::OK)
+	//{
+	//	LOG("Failed to initialise Level");
+	//	return AppStatus::ERROR;
+	//}
 
 	return AppStatus::OK;
 }
@@ -197,45 +197,6 @@ AppStatus Scene::LoadLevel(int stage)
 	if (stage == 1)
 	{
 		map = new int[size] {
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  -1, 100,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
-			};	 
-				 player->InitScore();
-				 /*map = new int[size] {
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
@@ -273,8 +234,7 @@ AppStatus Scene::LoadLevel(int stage)
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 		};
-		player->InitScore();
-		map2 = new int[size] {
+		new int[size] {
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
@@ -311,7 +271,8 @@ AppStatus Scene::LoadLevel(int stage)
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  110,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,   0,
-		};*/
+		};
+		player->InitScore();
 	}
 	else
 	{
@@ -327,6 +288,7 @@ AppStatus Scene::LoadLevel(int stage)
 		for (x = 0; x < LEVEL_WIDTH; ++x)
 		{
 			tile = (Tile)map[i];
+
 			if (tile == Tile::EMPTY)
 			{
 				map[i] = 0;
@@ -368,7 +330,7 @@ void Scene::Update()
 	AABB box;
 
 	//Switch between the different debug modes: off, on (sprites & hitboxes), on (hitboxes) 
-	if (IsKeyPressed(KEY_F1))
+	if (IsKeyPressed(KEY_G))
 	{
 		debug = (DebugMode)(((int)debug + 1) % (int)DebugMode::SIZE);
 

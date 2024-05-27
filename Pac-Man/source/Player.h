@@ -48,6 +48,7 @@ public:
 	void DrawDebug(const Color& col) const;
 	void Release();
 
+
 private:
 	bool IsLookingRight() const;
 	bool IsLookingLeft() const;
