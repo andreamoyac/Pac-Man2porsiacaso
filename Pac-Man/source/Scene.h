@@ -34,6 +34,7 @@ private:
     Entity* red;
     Entity* orange;*/
     TileMap *level;
+    TileMap *levelInteract;
     std::vector<Object*> objects;
 
     Camera2D camera;

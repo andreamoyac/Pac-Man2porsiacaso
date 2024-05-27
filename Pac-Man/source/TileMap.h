@@ -64,9 +64,13 @@ public:
 
 	AppStatus Initialise();
 	AppStatus Load(int data[], int w, int h);
+	void ClearObjEntPos();
 	void Update();
 	void Render();
 	void Release();
+
+	bool IsTileObject(Tile tile) const;
+	bool IsTileEntity(Tile tile) const;
 
 	//Test for collisions with walls
 	bool TestCollisionWallLeft(const AABB& box) const;

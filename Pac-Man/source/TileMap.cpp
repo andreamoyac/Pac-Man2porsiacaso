@@ -146,6 +146,18 @@ AppStatus TileMap::Load(int data[], int w, int h)
 
 	return AppStatus::OK;
 }
+
+void TileMap::ClearObjEntPos()
+{
+	int i;
+	Tile tile;
+	for (i = 0; i < size; ++i)
+	{
+		tile = map[i];
+		if (IsTileEntity(tile) || IsTileObject(tile) || tile == Tile::EMPTY)
+			map[i] = Tile::AIR;
+	}
+}
 void TileMap::Update()
 {
 	/*if(DIE)
@@ -163,6 +175,19 @@ Tile TileMap::GetTileIndex(int x, int y) const
 	}
 	return map[x + y * width];
 }
+bool TileMap::IsTileObject(Tile tile) const
+{
+	return Tile::SPECIAL_FIRST <= tile && tile <= Tile::SPECIAL_LAST;
+}
+bool TileMap::IsTileEntity(Tile tile) const
+{
+	return Tile::ENTITY_FIRST <= tile && tile <= Tile::ENTITY_LAST;
+}
+//bool TileMap::IsTileSolid(Tile tile) const
+//{
+//	//return (Tile::SOLID_FIRST <= tile && tile <= Tile::SOLID_LAST);
+//	return (Tile::SOLID_FIRST <= tile && tile <= Tile::SOLID_LAST || (tile == Tile::BLOCK_PLATFORM_1 || tile == Tile::BLOCK_PLATFORM_2 || tile == Tile::BLOCK_PLATFORM_3));
+//}
 bool TileMap::IsTileSolid(Tile tile) const
 {
 	return (Tile::SOLID_FIRST <= tile && tile <= Tile::SOLID_LAST);

@@ -6,6 +6,7 @@ Scene::Scene()
 {
 	player = nullptr;
     level = nullptr;
+	levelInteract = nullptr;
 	
 	font1 = nullptr;
 	font2 = nullptr;
@@ -234,7 +235,7 @@ AppStatus Scene::LoadLevel(int stage)
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 		};
-		new int[size] {
+		map2=new int[size] {
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
 			 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,	  0,   0,   0,   0,   0,   0,   0,
@@ -281,13 +282,19 @@ AppStatus Scene::LoadLevel(int stage)
 		return AppStatus::ERROR;	
 	}
 
+	level->Load(map, LEVEL_WIDTH, LEVEL_HEIGHT); 
+	levelInteract->Load(map2, LEVEL_WIDTH, LEVEL_HEIGHT);
+
 	//Entities and objects
 	i = 0;
 	for (y = 0; y < LEVEL_HEIGHT; ++y)
 	{
 		for (x = 0; x < LEVEL_WIDTH; ++x)
 		{
-			tile = (Tile)map[i];
+			tile = (Tile)map2[i];
+			pos.x = x * TILE_SIZE;  //otra parte en GetRenderingPosition() en entity.cpp
+			pos.y = y * TILE_SIZE + TILE_SIZE;
+			//tile = (Tile)map[i];
 
 			if (tile == Tile::EMPTY)
 			{
@@ -295,10 +302,7 @@ AppStatus Scene::LoadLevel(int stage)
 			}
 			else if (tile == Tile::PACMAN)
 			{
-				pos.x = x * TILE_SIZE ;  //otra parte en GetRenderingPosition() en entity.cpp
-				pos.y = y * TILE_SIZE +TILE_SIZE;
 				player->SetPos(pos);
-				map[i] = 0;
 			}
 			/*else if (tile == Tile::ITEM_APPLE)
 			{
@@ -316,11 +320,27 @@ AppStatus Scene::LoadLevel(int stage)
 				objects.push_back(obj);
 				map[i] = 0;
 			}*/
+			else if (tile == Tile::PELLET)
+			{
+				obj = new Object(pos, ObjectType::PELLET);
+				objects.push_back(obj);
+				map[i] = 0;
+			}
+			else
+			{
+				LOG("Internal error loading scene: invalid entity or object tile id")
+			}
 			++i;
 		}
 	}
-	//Tile map
-	level->Load(map, LEVEL_WIDTH, LEVEL_HEIGHT);
+	
+	level->ClearObjEntPos();
+	levelInteract->ClearObjEntPos();
+
+
+	//level->Load(mapInteractables, LEVEL_WIDTH, LEVEL_HEIGHT); ??
+	delete[] map2;
+	delete[] map;
 
 	return AppStatus::OK;
 }
