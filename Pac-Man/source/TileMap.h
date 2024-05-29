@@ -81,6 +81,7 @@ public:
 	//When debug mode we want to see the grid lines
 	void RenderGrid() const;
 
+	AABB GetSweptAreaX(const AABB& hitboxbox) const;
 private:
 	void InitTileDictionary();
 
@@ -98,8 +99,8 @@ private:
 	//Dictionary of tile frames
 	std::unordered_map<int, Rectangle> dict_rect;
 
-	Sprite *fruits;
-	Sprite* lifes;
+	//Sprite *fruits;
+	//Sprite* lifes;
 	
 	//Tile sheet
 	const Texture2D *img_tiles;

@@ -3,7 +3,9 @@
 #include "Player.h"
 #include "TileMap.h"
 #include "Object.h"
+#include "EnemyManager.h"
 #include "Text.h"
+#include "Transition.h"
 
 enum class DebugMode { OFF, SPRITES_AND_HITBOXES, ONLY_HITBOXES, SIZE };
 
@@ -18,6 +20,11 @@ public:
     void Render();
     void Release();
 
+    void ScreenReset();
+    void TimerReset();
+    bool GameOver();
+    bool End();
+
 private:
     AppStatus LoadLevel(int stage);
     
@@ -28,18 +35,32 @@ private:
 
     void RenderGUI() const;
 
-    Player *player;
-    /*Entity* pink;
-    Entity* blue;
-    Entity* red;
-    Entity* orange;*/
+    unsigned int timer;
+    unsigned int timerComparision;
+    bool dyingTimer;
+    Player* player;
+    Enemy* enemy;
+    int currentLevel;
+    
+    
     TileMap *level;
-    TileMap *levelInteract;
+    TileMap *InteractableLevel;
+    
+    
     std::vector<Object*> objects;
 
+    EnemyManager* enemies;
+
+    bool ghost;
+    bool ghostie;
+    //Enemy* ghostsLeft[2];
     Camera2D camera;
     DebugMode debug;
 
-    Text* font1, * font2, * font3;
+
+    GameState state;
+
+    Text* font;
+    Transition transition;
 };
 

@@ -6,6 +6,11 @@
 //Function return values
 enum class AppStatus { OK = 0, ERROR, QUIT };
 
+
+//Game states - declared in Game.h
+enum class GameState { INTRO, MAIN_MENU, PLAYING, CREDITS, GAME_OVER, ENDING };
+
+
 //Main return values
 #define EXIT_SUCCESS	0
 #define EXIT_FAILURE	1

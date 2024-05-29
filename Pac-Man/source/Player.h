@@ -13,13 +13,9 @@
 #define PLAYER_SPEED			2
 
 
-//Frame animation delay while on a ladder
-#define ANIM_LADDER_DELAY		(2*ANIM_DELAY)
-
-
 
 //Logic states
-enum class State { IDLE, WALKING, DEAD, SCATTER, CHASE, FRIGHTENED };
+enum class State { IDLE, WALKING, DEAD};
 enum class Look { RIGHT, LEFT, UP, DOWN };
 
 //Rendering states
@@ -44,9 +40,29 @@ public:
 	void IncrScore(int n);
 	int GetScore();
 
+	
+	int GetLives() const;
+	bool GetDead() const;
+	void SetDead(bool state);
+	bool GetGameOver() const;
+	void SetGameOver(bool state);
+	bool GetGameEnd() const;
+	void SetGameEnd(bool state);
+
+
+
+	int GetXPos();
+	int GetYPos();
+
 	void Update();
 	void DrawDebug(const Color& col) const;
 	void Release();
+	
+	
+	bool GetPlayerLookingRight() const;
+	bool GetPlayerLookingLeft() const;
+	bool GetPlayerLookingUp() const;
+	bool GetPlayerLookingDown() const;
 
 
 private:
@@ -73,6 +89,7 @@ private:
 	void ChangeAnimDown();
 	void Dead();
 
+	void finishAnimation();
 
 	State state;
 	Look look;
@@ -80,6 +97,17 @@ private:
 	TileMap *map;
 
 	int score;
+	int lives;
+	int currentFrame;
+
+	bool Dead;
+	bool gameOver;
+	bool gameEnd;
+
+	bool isInvincible;
+	int fstFrame;
+
+	bool godMode;
 };
 
 /*

@@ -1,8 +1,9 @@
 #pragma once
 #include "Globals.h"
 #include "Scene.h"
+#include "Transition.h"
 
-enum class GameState { MAIN_MENU, PLAYING, CREDITS, INTRO };
+enum class GameState { MAIN_MENU, PLAYING, CREDITS, INTRO, GAME_OVER, END };
 
 class Game
 {
@@ -14,6 +15,7 @@ public:
     AppStatus Update();
     void Render();
     void Cleanup();
+   
     void playCreditsAnimation();
     void playIntroAnimation();
 
@@ -31,7 +33,13 @@ private:
     bool animationFinished=false;
     bool animationFinished2=false;
 
+    Music Ost2PacMan;
+    Sound Ost2PacMan;
+
     //To work with original game units and then scale the result
     RenderTexture2D target;
     Rectangle src, dst;
+
+    //TRANSITION
+    Transition transition;
 };

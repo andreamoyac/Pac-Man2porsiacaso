@@ -1,17 +1,22 @@
 #pragma once
 #include "Entity.h"
+#include "TileMap.h"
 
-
+//Representation model size: 32x32
 #define ENEMY_FRAME_SIZE		16
 
-
-#define ENEMY_PHYSICAL_WIDTH	28
+//Logical model size: 12x28
+#define ENEMY_PHYSICAL_WIDTH	12
 #define ENEMY_PHYSICAL_HEIGHT	28
 
+//Horizontal speed and vertical speed while falling down
 #define ENEMY_SPEED			2
 
-enum class EnemyColor {CYAN, RED, PINK, ORANGE };
 
+
+
+
+//Logic states
 enum class State { SCATTER, CHASE, FRIGHTENED };
 enum class Look { RIGHT, LEFT, UP, DOWN };
 
@@ -29,11 +34,13 @@ public:
 	Enemy(const Point& p, State s, Look view);
 	~Enemy();
 
-	void DrawVisibilityArea(const Color& col) const;
 	AppStatus Initialise();
+	void SetTileMap(TileMap* tilemap);
 
 
 	void Update();
+	void DrawDebug(const Color& col) const;
+	void Release();
 
 private:
 	bool IsLookingRight() const;
@@ -59,7 +66,8 @@ private:
 
 	State state;
 	Look look;
-	AABB visibility_area;
+
+	TileMap* map;
 
 };
 

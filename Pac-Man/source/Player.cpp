@@ -1,9 +1,9 @@
 
 #include "Player.h"
 #include "Sprite.h"
-#include "TileMap.h"
 #include "Globals.h"
 #include <raymath.h>
+#include "raylib.h" 
 
 Player::Player(const Point& p, State s, Look view) :
 	Entity(p, PLAYER_PHYSICAL_WIDTH, PLAYER_PHYSICAL_HEIGHT, PLAYER_FRAME_SIZE, PLAYER_FRAME_SIZE)
@@ -11,7 +11,12 @@ Player::Player(const Point& p, State s, Look view) :
 	state = s;
 	look = view;
 	map = nullptr;
+	lives = 3;
 	score = 0;
+	hasDied = false;
+	godMode = false;
+	gameEnd = false;
+	isInvincible = false;
 }
 Player::~Player()
 {

@@ -20,7 +20,7 @@
       <UniqueIdentifier>{11a2e943-413c-4f67-9a82-de8843743f09}</UniqueIdentifier>
     </Filter>
     <Filter Include="Entities\Enemies">
-      <UniqueIdentifier>{48c82862-2af6-483c-b28a-223c69ec8996}</UniqueIdentifier>
+      <UniqueIdentifier>{f337b147-c01e-4ff5-8312-a7313abe3113}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,19 +63,16 @@
     <ClCompile Include="source\StaticImage.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="source\Enemy.cpp">
-      <Filter>Entities\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Orange.cpp">
-      <Filter>Entities\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Pink.cpp">
-      <Filter>Entities\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Red.cpp">
-      <Filter>Entities\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="source\Text.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\EnemyManager.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Enemy.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Transition.cpp">
       <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,10 +119,16 @@
     <ClInclude Include="source\StaticImage.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="source\Enemy.h">
-      <Filter>Entities\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="source\Text.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\EnemyManager.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Enemy.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Transition.h">
       <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>

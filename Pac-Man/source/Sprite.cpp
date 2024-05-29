@@ -44,6 +44,14 @@ int Sprite::GetAnimation()
 {
     return current_anim;
 }
+bool Sprite::GetAnimationFinished() const
+{
+    return AnimationFinished;
+}
+void Sprite::SetAnimationFinished(bool value)
+{
+    AnimationFinished = value;
+}
 void Sprite::SetManualMode()
 {
     mode = AnimMode::MANUAL;
@@ -51,6 +59,15 @@ void Sprite::SetManualMode()
 void Sprite::SetAutomaticMode()
 {
     mode = AnimMode::AUTOMATIC;
+}
+bool Sprite::AnimationCompleted() const
+{
+    return completed_animation;
+}
+void Sprite::RepeatOnceMore()
+{
+    mode = AnimMode::PLAYAGAIN;
+    SetAnimationFinished(false);
 }
 void Sprite::Update()
 {
@@ -66,6 +83,23 @@ void Sprite::Update()
                 current_frame++;
                 current_frame %= animations[current_anim].frames.size();
                 current_delay = animations[current_anim].delay;
+
+                //Animation is complete when we repeat from the first frame
+                completed_animation = (current_frame == 0);
+            }
+            if (mode == AnimMode::PLAYAGAIN)
+            {
+
+                current_frame++;
+                //current_delay = animations[current_anim].delay;
+                current_delay = animations[current_anim].delay;
+                //current_delay = animations[current_anim].delay;
+                //if (current_frame == animations[current_anim].frames.size() - 1)
+                if (current_frame == animations[current_anim].frames.size())
+                {
+                    SetAnimationFinished(true);
+                    mode = AnimMode::AUTOMATIC;
+                }
             }
         }
     }

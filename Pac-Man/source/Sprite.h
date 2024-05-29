@@ -3,7 +3,7 @@
 #include "RenderComponent.h"
 #include <vector>
 
-enum class AnimMode { AUTOMATIC, MANUAL };
+enum class AnimMode { AUTOMATIC, MANUAL, PLAYAGAIN };
 
 struct Animation
 {
@@ -23,8 +23,13 @@ public:
     void SetAnimation(int id);
     int GetAnimation();
 
+    bool GetAnimationFinished() const;
+    void SetAnimationFinished(bool value);
+
     void SetManualMode();
     void SetAutomaticMode();
+    void RepeatOnceMore();
+    bool AnimationCompleted() const;
     
     void Update();
     void NextFrame();
@@ -41,8 +46,14 @@ private:
     int current_frame;
     int current_delay;
 
+    bool AnimationFinished;
+
     const Texture2D *img;
     std::vector<Animation> animations;
+
+
+    bool completed_animation;
+
 
     AnimMode mode;
 };

@@ -148,15 +148,13 @@
   <ItemGroup>
     <ClCompile Include="source\AABB.cpp" />
     <ClCompile Include="source\Enemy.cpp" />
+    <ClCompile Include="source\EnemyManager.cpp" />
     <ClCompile Include="source\Entity.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\Globals.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Object.cpp" />
-    <ClCompile Include="source\Orange.cpp" />
-    <ClCompile Include="source\Pink.cpp" />
     <ClCompile Include="source\Player.cpp" />
-    <ClCompile Include="source\Red.cpp" />
     <ClCompile Include="source\RenderComponent.cpp" />
     <ClCompile Include="source\ResourceManager.cpp" />
     <ClCompile Include="source\Scene.cpp" />
@@ -164,10 +162,12 @@
     <ClCompile Include="source\StaticImage.cpp" />
     <ClCompile Include="source\Text.cpp" />
     <ClCompile Include="source\TileMap.cpp" />
+    <ClCompile Include="source\Transition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\AABB.h" />
     <ClInclude Include="source\Enemy.h" />
+    <ClInclude Include="source\EnemyManager.h" />
     <ClInclude Include="source\Entity.h" />
     <ClInclude Include="source\Game.h" />
     <ClInclude Include="source\Globals.h" />
@@ -182,6 +182,7 @@
     <ClInclude Include="source\StaticImage.h" />
     <ClInclude Include="source\Text.h" />
     <ClInclude Include="source\TileMap.h" />
+    <ClInclude Include="source\Transition.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

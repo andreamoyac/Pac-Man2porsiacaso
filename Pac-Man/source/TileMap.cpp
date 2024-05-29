@@ -8,8 +8,8 @@ TileMap::TileMap()
 	map = nullptr;
 	width =0;
 	height =0;
-	lifes = nullptr;
-	fruits = nullptr;
+	//lifes = nullptr; diria q iria en scene
+	//fruits = nullptr;
 	img_tiles = nullptr;
 
 	InitTileDictionary();
@@ -21,18 +21,18 @@ TileMap::~TileMap()
 		delete[] map;
 		map = nullptr;
 	}
-	if (fruits != nullptr)
+	/*if (fruits != nullptr)
 	{
 		fruits->Release();
 		delete fruits;
 		fruits = nullptr;
-	}
-	if (lifes != nullptr)
+	}*/
+	/*if (lifes != nullptr)
 	{
 		lifes->Release();
 		delete lifes;
 		lifes = nullptr;
-	}
+	}*/
 }
 void TileMap::InitTileDictionary()
 {
@@ -83,8 +83,8 @@ void TileMap::InitTileDictionary()
 	dict_rect[(int)Tile::ENERGIZER] = { 12 * n, 26 * n, n, n };
 	dict_rect[(int)Tile::CHERRY] = { 23 * n, 24 * n, n, n }; //DIRIA
 
-	dict_rect[(int)Tile::CURRENT_FRUITS] = { 12 * n, 26 * n, n, n };
-	dict_rect[(int)Tile::CURRENT_LIFES] = { 12 * n, 26 * n, n, n };
+	//dict_rect[(int)Tile::CURRENT_FRUITS] = { 12 * n, 26 * n, n, n };
+	//dict_rect[(int)Tile::CURRENT_LIFES] = { 12 * n, 26 * n, n, n };
 
 }
 AppStatus TileMap::Initialise()
@@ -97,34 +97,26 @@ AppStatus TileMap::Initialise()
 	}
 	img_tiles = data.GetTexture(Resource::IMG_TILES);
 
-	fruits = new Sprite(img_tiles);
-	if (fruits == nullptr)
+
+	/*if (data.LoadTexture(Resource::IMG_TILES, "images/tilemap.png") != AppStatus::OK)
+	{
+		return AppStatus::ERROR;
+	}
+	img_tiles = data.GetTexture(Resource::IMG_TILES);*/
+	/*energizer = new Sprite(img_tiles);
+	if (energizer == nullptr)
 	{
 		LOG("Failed to allocate memory for laser sprite");
 		return AppStatus::ERROR;
 	}
-	fruits->SetNumberAnimations(1);
-	fruits->SetAnimationDelay(0, ANIM_DELAY);
-	fruits->AddKeyFrame(0, dict_rect[(int)Tile::SQUARE_TILE_BL]);
-	fruits->AddKeyFrame(0, dict_rect[(int)Tile::SQUARE_TILE_BR]);
-	fruits->AddKeyFrame(0, dict_rect[(int)Tile::SQUARE_TILE_TR]);
-	fruits->SetAnimation(0);
+	laser->SetNumberAnimations(1);
+	laser->SetAnimationDelay(0, ANIM_DELAY_FIRE);
+	laser->AddKeyFrame(0, dict_rect[(int)Tile::LASER_FRAME0]);
+	laser->AddKeyFrame(0, dict_rect[(int)Tile::LASER_FRAME1]);
+	laser->AddKeyFrame(0, dict_rect[(int)Tile::LASER_FRAME2]);
+	laser->SetAnimation(0);
 
-	return AppStatus::OK;
-	
-	lifes = new Sprite(img_tiles);
-	if (lifes == nullptr)
-	{
-		LOG("Failed to allocate memory for laser sprite");
-		return AppStatus::ERROR;
-	}
-	lifes->SetNumberAnimations(1);
-	lifes->SetAnimationDelay(0, ANIM_DELAY);
-	lifes->AddKeyFrame(0, dict_rect[(int)Tile::SQUARE_TILE_BL]);
-	lifes->AddKeyFrame(0, dict_rect[(int)Tile::SQUARE_TILE_BR]);
-	lifes->AddKeyFrame(0, dict_rect[(int)Tile::SQUARE_TILE_TR]);
-	lifes->SetAnimation(0);
-
+	return AppStatus::OK;*/ //energizer and 1up
 	return AppStatus::OK;
 }
 
@@ -202,11 +194,11 @@ bool TileMap::TestCollisionWallRight(const AABB& box) const
 }
 bool TileMap::TestCollisionWallUp(const AABB& box) const
 {
-	return CollisionY(box.pos, box.height);
+	return CollisionY(box.pos, box.height); //creo q hay q cambiar esto
 }
 bool TileMap::TestCollisionWallDown(const AABB& box) const
 {
-	return CollisionY(box.pos + Point(box.width - 1, 0), box.height);
+	return CollisionY(box.pos + Point(box.width - 1, 0), box.height); //creo q hay q cambiar esto
 }
 
 bool TileMap::CollisionX(const Point& p, int distance) const
@@ -248,74 +240,59 @@ bool TileMap::CollisionY(const Point& p, int distance) const
 	}
 	return false;
 }
-//bool TileMap::TestOnLadder(const AABB& box, int* px) const
-//{
-//	int left, right, bottom;
-//	int tx1, tx2, ty;
-//	Tile tile1, tile2;
-//	
-//	//Control points
-//	left = box.pos.x;
-//	right = box.pos.x + box.width-1;
-//	bottom = box.pos.y + box.height-1;
-//
-//	//Calculate the tile coordinates
-//	tx1 = left / TILE_SIZE;
-//	tx2 = right / TILE_SIZE;
-//	ty = bottom / TILE_SIZE;
-//
-//	//To be able to climb up or down, both control points must be on ladder
-//	tile1 = GetTileIndex(tx1, ty);
-//	tile2 = GetTileIndex(tx2, ty);
-//	if (IsTileLadder(tile1) && IsTileLadder(tile2))
-//	{
-//		*px = GetLadderCenterPos(left, bottom) - box.width/2;
-//		return true;
-//	}
-//	return false;
-//}
-//bool TileMap::TestOnLadderTop(const AABB& box, int* px) const
-//{
-//	int left, right, bottom;
-//	int tx1, tx2, ty;
-//	Tile tile1, tile2;
-//
-//	//Control points
-//	left = box.pos.x;
-//	right = box.pos.x + box.width - 1;
-//	bottom = box.pos.y + box.height - 1;
-//
-//	//Calculate the tile coordinates
-//	tx1 = left / TILE_SIZE;
-//	tx2 = right / TILE_SIZE;
-//	ty = bottom / TILE_SIZE;
-//
-//	//To be able to climb up or down, both control points must be on ladder
-//	tile1 = GetTileIndex(tx1, ty);
-//	tile2 = GetTileIndex(tx2, ty);
-//	if (IsTileLadderTop(tile1) && IsTileLadderTop(tile2))
-//	{
-//		*px = GetLadderCenterPos(left, bottom) - box.width / 2;
-//		return true;
-//	}
-//	return false;
-//}
-//int TileMap::GetLadderCenterPos(int pixel_x, int pixel_y) const
-//{
-//	int tx, ty;
-//	
-//	tx = pixel_x / TILE_SIZE;
-//	ty = pixel_y / TILE_SIZE;
-//	Tile tile = GetTileIndex(tx, ty);
-//
-//	if (tile == Tile::LADDER_L || tile == Tile::LADDER_TOP_L)		return tx * TILE_SIZE + TILE_SIZE;
-//	else if (tile == Tile::LADDER_R || tile == Tile::LADDER_TOP_R)	return tx * TILE_SIZE;
-//	else
-//	{
-//		LOG("Internal error, tile should be a LADDER, coord: (%d,%d), tile type: %d", pixel_x, pixel_y, (int)tile);
-//		return 0;
-//	}
-//}
+AABB TileMap::GetSweptAreaX(const AABB& hitbox) const //no undertiendo
+{
+	AABB box;
+	int column, x, y, y0, y1;
+	bool collision;
+
+	box.pos.y = hitbox.pos.y;
+	box.height = hitbox.height;
+
+	column = hitbox.pos.x / TILE_SIZE;
+	y0 = hitbox.pos.y / TILE_SIZE;
+	y1 = (hitbox.pos.y + hitbox.height - 1) / TILE_SIZE;
+
+	//Compute left tile index
+	collision = false;
+	x = column - 1;
+	while (!collision && x >= 0)
+	{
+		//Iterate over the tiles within the vertical range
+		for (y = y0; y <= y1; ++y)
+		{
+			//One solid tile is sufficient
+			if (IsTileSolid(GetTileIndex(x, y)))
+			{
+				collision = true;
+				break;
+			}
+		}
+		if (!collision) x--;
+	}
+	box.pos.x = (x + 1) * TILE_SIZE;
+
+	//Compute right tile index
+	collision = false;
+	x = column + 1;
+	while (!collision && x < LEVEL_WIDTH)
+	{
+		//Iterate over the tiles within the vertical range
+		for (y = y0; y <= y1; ++y)
+		{
+			//One solid tile is sufficient
+			if (IsTileSolid(GetTileIndex(x, y)))
+			{
+				collision = true;
+				break;
+			}
+		}
+		if (!collision) x++;
+	}
+	box.width = x * TILE_SIZE - box.pos.x;
+
+	return box;
+}
 void TileMap::Render()
 {
 	Tile tile;
