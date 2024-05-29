@@ -13,7 +13,7 @@ Player::Player(const Point& p, State s, Look view) :
 	map = nullptr;
 	lives = 3;
 	score = 0;
-	hasDied = false;
+	Dead = false;
 	godMode = false;
 	gameEnd = false;
 	isInvincible = false;
@@ -27,7 +27,7 @@ AppStatus Player::Initialise()
 	const int n = PLAYER_FRAME_SIZE;
 
 	ResourceManager& data = ResourceManager::Instance();
-	if (data.LoadTexture(Resource::IMG_PLAYER, "images/tilemap.png") != AppStatus::OK)
+	if (data.LoadTexture(Resource::IMG_PLAYER, "images/player.png") != AppStatus::OK)
 	{
 		return AppStatus::ERROR;
 	}
@@ -67,7 +67,7 @@ AppStatus Player::Initialise()
 	
 
 
-	sprite->SetAnimationDelay((int)PlayerAnim::DEATH, ANIM_LADDER_DELAY);
+	sprite->SetAnimationDelay((int)PlayerAnim::DEATH, ANIM_DELAY);
 	for (i = 0; i < 4; ++i)
 		sprite->AddKeyFrame((int)PlayerAnim::DEATH, { (float)i * n, 6 * n, n, n });
 
@@ -75,6 +75,16 @@ AppStatus Player::Initialise()
 
 	return AppStatus::OK;
 }
+
+
+
+////SOUNDS
+
+
+
+
+
+
 void Player::InitScore()
 {
 	score = 0;
@@ -83,9 +93,50 @@ void Player::IncrScore(int n)
 {
 	score += n;
 }
+void Player::GodMode()
+{
+	godMode = !godMode;
+}
 int Player::GetScore()
 {
 	return score;
+}
+int Player::GetLives() const
+{
+	return lives;
+}
+bool Player::GetDead() const
+{
+	return Dead;
+}
+void Player::SetDead(bool state)
+{
+	Dead = state;
+}
+
+bool Player::GetGameOver() const
+{
+	return gameOver;
+}
+void Player::SetGameOver(bool state)
+{
+	gameOver = state;
+}
+bool Player::GetGameEnd() const
+{
+	return gameEnd;
+}
+void Player::SetGameEnd(bool state)
+{
+	gameEnd = state;
+}
+int Player::GetXPos()
+{
+	return pos.x;
+}
+int Player::GetYPos()
+{
+	return pos.y;
 }
 void Player::SetTileMap(TileMap* tilemap)
 {
@@ -106,6 +157,13 @@ bool Player::IsLookingUp() const
 bool Player::IsLookingDown() const
 {
 	return look == Look::DOWN;
+}
+bool Player::GetPlayerInvincible() const
+{
+	if (isInvincible)
+		return true;
+	else
+		return false;
 }
 
 void Player::SetAnimation(int id)
@@ -151,12 +209,9 @@ void Player::StartWalkingDown()
 	look = Look::DOWN;
 	SetAnimation((int)PlayerAnim::WALKING_DOWN);
 }
-void Player::Dead()
+bool Player::Dead() const
 {
-	state = State::DEAD;
-	SetAnimation((int)PlayerAnim::DEATH);
-	Sprite* sprite = dynamic_cast<Sprite*>(render);
-	sprite->SetManualMode();
+	return isDead;
 }
 void Player::ChangeAnimRight()
 {

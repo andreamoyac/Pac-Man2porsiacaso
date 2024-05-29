@@ -40,7 +40,8 @@ public:
 	void IncrScore(int n);
 	int GetScore();
 
-	
+	void GodMode();
+
 	int GetLives() const;
 	bool GetDead() const;
 	void SetDead(bool state);
@@ -108,6 +109,24 @@ private:
 	int fstFrame;
 
 	bool godMode;
+
+	Sound creditSFX;
+	Sound death1SFX;
+	Sound death2SFX;
+	Sound eatfruitSFX;
+	Sound eatghostSFX;
+	Sound extendSFX;
+	Sound munch1SFX;
+	Sound munch2SFX;
+	Sound powerpelletSFX; //24
+	Sound retreatingSFX;
+	Sound siren1SFX;
+	Sound siren2SFX;
+	Sound siren3SFX;
+	Sound siren4SFX;
+	Sound siren5SFX;
+
+	bool unloadedSounds;
 };
 
 /*
