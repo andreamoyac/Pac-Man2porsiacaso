@@ -138,6 +138,10 @@ int Player::GetYPos()
 {
 	return pos.y;
 }
+bool Player::GetHasEatenEnergizer() const
+{
+	return Player::hasEatenEnergizer;
+}
 void Player::SetTileMap(TileMap* tilemap)
 {
 	map = tilemap;
@@ -209,9 +213,32 @@ void Player::StartWalkingDown()
 	look = Look::DOWN;
 	SetAnimation((int)PlayerAnim::WALKING_DOWN);
 }
-bool Player::Dead() const
+void Player::Death()
 {
-	return isDead;
+	Dead = true;
+	state = State::DEAD;
+	lives--;
+	
+	SetAnimation((int)PlayerAnim::DEATH);
+	Sprite* sprite = dynamic_cast<Sprite*>(render);
+	//while (sprite->GetIsAnimationFinished() == false)
+	//{
+	sprite->RepeatOnceMore();
+
+	if (lives <= 0)
+	{
+		gameOver = true;
+
+	}
+	else
+	{
+		if (IsKeyPressed(KEY_ENTER)) {
+			{
+				//continuelevel
+			}
+
+	}
+}
 }
 void Player::ChangeAnimRight()
 {

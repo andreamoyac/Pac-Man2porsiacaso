@@ -12,7 +12,7 @@ public:
 
 	void SetTileMap(TileMap* tilemap);
 
-	void Add(const Point& pos, EnemyColor color, const AABB& area, Look look);
+	void addEnemy(const Point& pos, EnemyType type, const AABB& area, Look look);
 
 	AABB GetEnemyHitBox(const Point& pos) const;
 
@@ -25,8 +25,7 @@ public:
 
 	void Release();
 
-	int totalEnemies = 4; //?
-
+	void handleGhostEaten(Enemy* ghost);
 protected:
 	TileMap* map;
 

@@ -1,73 +1,47 @@
 #pragma once
-#include "Entity.h"
-#include "TileMap.h"
-
-//Representation model size: 32x32
-#define ENEMY_FRAME_SIZE		16
-
-//Logical model size: 12x28
-#define ENEMY_PHYSICAL_WIDTH	12
-#define ENEMY_PHYSICAL_HEIGHT	28
-
-//Horizontal speed and vertical speed while falling down
-#define ENEMY_SPEED			2
+#include "Enemy.h"
+//#include "TileMap.h"
 
 
-
-
-
-//Logic states
-enum class State { SCATTER, CHASE, FRIGHTENED };
-enum class Look { RIGHT, LEFT, UP, DOWN };
-
-//Rendering states
-enum class EnemyAnim {
+enum class BlinkyAnim {
 	EYES_LEFT, EYES_RIGHT, EYES_UP, EYES_DOWN,
 	WALKING_LEFT, WALKING_RIGHT, WALKING_UP, WALKING_DOWN,
-	BLUE_LEFT, BLUE_RIGHT, BLUE_UP, BLUE_DOWN,
 	NUM_ANIMATIONS
 };
 
-class Enemy : public Entity
+struct BlinkyStep
+{
+	Point speed;	//direction
+	int frames;		//duration in number of frames
+	int anim;		//graphical representation
+};
+
+class Blinky : public Enemy
 {
 public:
-	Enemy(const Point& p, State s, Look view);
-	~Enemy();
+	Blinky(const Point& p, int width, int height, int frame_size);
+	~Blinky();
 
-	AppStatus Initialise();
-	void SetTileMap(TileMap* tilemap);
+	//Initialize the enemy with the specified look and area
+	AppStatus Initialise(Look look, const AABB& area) override;
 
 
-	void Update();
-	void DrawDebug(const Color& col) const;
-	void Release();
+	bool Update(const AABB& box) override;
+
 
 private:
-	bool IsLookingRight() const;
-	bool IsLookingLeft() const;
-	bool IsLookingUp() const;
-	bool IsLookingDown() const;
+	//Create the pattern behaviour
+	void InitPattern();
 
-
-	//Animation management
-	void SetAnimation(int id);
-	EnemyAnim GetAnimation();
-	void Stop();
-	void StartWalkingLeft();
-	void StartWalkingRight();
-	void StartWalkingUp();
-	void StartWalkingDown();
-	void ChangeAnimRight();
-	void ChangeAnimLeft();
-	void ChangeAnimUp();
-	void ChangeAnimDown();
-	void Dead();
-
+	//Update looking direction according to the current step of the pattern
+	void UpdateLook(int anim_id);
 
 	State state;
-	Look look;
 
-	TileMap* map;
-
+	int current_step;	//current step of the pattern
+	int current_frames;	//number of frames in the current step
+	std::vector<BlinkyStep> pattern;
 };
+
+
 

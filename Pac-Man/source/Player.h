@@ -59,6 +59,7 @@ public:
 	void DrawDebug(const Color& col) const;
 	void Release();
 	
+	bool GetPlayerInvincible() const;
 	
 	bool GetPlayerLookingRight() const;
 	bool GetPlayerLookingLeft() const;
@@ -88,7 +89,8 @@ private:
 	void ChangeAnimLeft();
 	void ChangeAnimUp();
 	void ChangeAnimDown();
-	void Dead();
+	void Death();
+	
 
 	void finishAnimation();
 
@@ -101,9 +103,12 @@ private:
 	int lives;
 	int currentFrame;
 
+	bool hasEatenEnergizer;
+
 	bool Dead;
 	bool gameOver;
 	bool gameEnd;
+	bool GetHasEatenEnergizer() const;
 
 	bool isInvincible;
 	int fstFrame;

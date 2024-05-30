@@ -1,62 +1,45 @@
 #pragma once
 #include "Enemy.h"
-#include "TileMap.h"
-
-#define CYAN_SPEED			2
-#define CYAN_ANIM_DELAY	(2*ANIM_DELAY)
+//#include "TileMap.h"
 
 
-
-
-
-//Rendering states
-enum class CyanAnim {
+enum class InkyState { SCATTER, CHASE, FRIGHTENED, EATEN };
+enum class InkyAnim {
 	EYES_LEFT, EYES_RIGHT, EYES_UP, EYES_DOWN,
 	WALKING_LEFT, WALKING_RIGHT, WALKING_UP, WALKING_DOWN,
-	BLUE_LEFT, BLUE_RIGHT, BLUE_UP, BLUE_DOWN,
 	NUM_ANIMATIONS
 };
 
-class Cyan : public Enemy
+struct InkyStep
 {
-public:
-	Cyan(const Point& p, State s, Look view);
-	~Cyan();
-
-	AppStatus Initialise();
-	//void SetTileMap(TileMap* tilemap);
-
-
-	void Update();
-	void DrawDebug(const Color& col) const;
-	void Release();
-
-private:
-	/*bool IsLookingRight() const;
-	bool IsLookingLeft() const;
-	bool IsLookingUp() const;
-	bool IsLookingDown() const;*/
-
-
-	//Animation management
-	//void SetAnimation(int id);
-	//EnemyAnim GetAnimation();
-	//void Stop();
-	//void StartWalkingLeft();
-	//void StartWalkingRight();
-	//void StartWalkingUp();
-	//void StartWalkingDown();
-	//void ChangeAnimRight();
-	//void ChangeAnimLeft();
-	//void ChangeAnimUp();
-	//void ChangeAnimDown();
-	//void Dead();
-
-
-	State state;
-	Look look;
-
-	TileMap* map;
-
+	Point speed;	//direction
+	int frames;		//duration in number of frames
+	int anim;		//graphical representation
 };
 
+class Inky : public Enemy
+{
+public:
+	Inky(const Point& p, int width, int height, int frame_size);
+	~Inky();
+
+	//Initialize the enemy with the specified look and area
+	AppStatus Initialise(Look look, const AABB& area) override;
+
+
+	bool Update(const AABB& box) override;
+
+
+private:
+	//Create the pattern behaviour
+	void InitPattern();
+
+	//Update looking direction according to the current step of the pattern
+	void UpdateLook(int anim_id);
+
+	State state;
+
+	int current_step;	//current step of the pattern
+	int current_frames;	//number of frames in the current step
+	std::vector<InkyStep> pattern;
+};

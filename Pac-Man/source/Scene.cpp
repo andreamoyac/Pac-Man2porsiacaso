@@ -53,7 +53,7 @@ Scene::~Scene()
 	}
 	if (font != nullptr)
 	{
-		delete font1;
+		delete font;
 		font = nullptr;
 	}
 }
@@ -484,44 +484,6 @@ void Scene::Update()
 		}
 	}
 
-	if ((currentLevel == 1 /*|| currentLevel == 3*/) && ((timer % 150) == 0))
-	{
-		AABB player_hitbox;
-
-		player_hitbox = player->GetHitbox();
-		//enemy_box = enemies->GetEnemyHitBox(ZOMBIE);
-	//	enemy_box = enemies->GetEnemyHitBox(pos, EnemyType::ZOMBIE);
-
-
-		Point pos;
-		AABB hitbox, area;
-
-		if (player->GetPlayerLooksRight() == true)
-		{
-			pos.x = WINDOW_WIDTH - FISHMAN_FRAME_SIZE_WIDTH - 1;
-			pos.y = 100;
-		}
-		else if (player->GetPlayerLooksgLeft() == true)
-		{
-			pos.x = 1;
-			pos.y = 148;
-		}
-		if (player->GetPlayerLooksUp() == true)
-		{
-			pos.x = WINDOW_WIDTH - FISHMAN_FRAME_SIZE_WIDTH - 1;
-			pos.y = 100;
-		}
-		else if (player->GetPlayerLooksDown() == true)
-		{
-			pos.x = 1;
-			pos.y = 148;
-		}
-
-
-		hitbox = enemies->GetEnemyHitBox(pos, EnemyType::GHOST);
-		area = level->GetSweptAreaX(hitbox);//?
-
-	}
 }
 
 void Scene::Render()

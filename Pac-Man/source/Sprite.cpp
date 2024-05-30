@@ -3,10 +3,12 @@
 Sprite::Sprite(const Texture2D *texture)
 {
     img = texture;
+    AnimationFinished = false;
     current_anim = -1;
     current_frame = 0;
     current_delay = 0;
     mode = AnimMode::AUTOMATIC;
+    completed_animation = false;
 }
 Sprite::~Sprite()
 {

@@ -75,6 +75,18 @@
     <ClCompile Include="source\Transition.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="source\Blinky.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Clyde.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Inky.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Pinky.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Globals.h">
@@ -130,6 +142,18 @@
     </ClInclude>
     <ClInclude Include="source\Transition.h">
       <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Blinky.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Clyde.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Inky.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Pinky.h">
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

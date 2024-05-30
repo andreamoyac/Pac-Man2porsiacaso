@@ -10,7 +10,11 @@ enum class Resource {
     IMG_PLAYER, 
     IMG_TILES,
     IMG_FONT,
-    MAZE_IMG
+    MAZE_IMG,
+    IMG_ENEMIES,
+    IMG_CREDITS,
+    IMG_ENDING,
+    IMG_INTRO
 };
 
 class ResourceManager {
@@ -23,6 +27,9 @@ public:
 
     AppStatus LoadTexture(Resource id, const std::string& file_path);
     void ReleaseTexture(Resource id);
+
+    void LoadSounds();
+    void ReleaseSounds();
 
     const Texture2D* GetTexture(Resource id) const;
 

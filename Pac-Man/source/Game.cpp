@@ -77,7 +77,21 @@ AppStatus Game::LoadResources()
         return AppStatus::ERROR;
     }
     maze_img = data.GetTexture(Resource::MAZE_IMG);
-    
+    if (data.LoadTexture(Resource::IMG_CREDITS, "images/CREDITS.png") != AppStatus::OK)
+    {
+        return AppStatus::ERROR;
+    }
+    credits_img = data.GetTexture(Resource::IMG_CREDITS);
+    if (data.LoadTexture(Resource::IMG_INTRO, "images/INTRO.png") != AppStatus::OK)
+    {
+        return AppStatus::ERROR;
+    }
+    intro_img = data.GetTexture(Resource::IMG_INTRO);
+    if (data.LoadTexture(Resource::IMG_ENDING, "images/END.png") != AppStatus::OK)
+    {
+        return AppStatus::ERROR;
+    }
+    ending_img = data.GetTexture(Resource::IMG_ENDING);
 
     data.LoadSounds();
 
@@ -150,37 +164,25 @@ AppStatus Game::Update()
     {
         switch (state)
         {
-        case GameState::INTRO:
-            playIntroAnimation();
-            if (animationFinished) {
-                state = GameState::MAIN_MENU;
-            }
-            else { animationFinished = false; }
-            /*if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;
-            if (IsKeyPressed(KEY_SPACE)) {
-                state = GameState::DESCRIPTION_SCREEN;
-            }
-            break;*/
-            break;
         case GameState::CREDITS:
-            playCreditsAnimation();
-            if (animationFinished2) {
-                state = GameState::MAIN_MENU;
+            if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;
+            if (IsKeyPressed(KEY_ENTER)) {
+                state = GameState::INTRO;
             }
-            else { animationFinished2 = false; }
             break;
-           /* if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;
-            if (IsKeyPressed(KEY_SPACE)) {
+        case GameState::INTRO:
+            if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;
+            if (IsKeyPressed(KEY_ENTER)) {
                 state = GameState::MAIN_MENU;
             }
-            break;*/
+            break;
         case GameState::MAIN_MENU:
             if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;
             if (IsKeyPressed(KEY_ENTER))
             {
                 if (BeginPlay() != AppStatus::OK) return AppStatus::ERROR;
                 state = GameState::PLAYING;
-                //fade_transition.Set(GameState::MAIN_MENU, 5, GameState::PLAYING, 5, dst);
+                //transition.Set(GameState::MAIN_MENU, 5, GameState::PLAYING, 5, dst);
                 //PlayMusicStream(Ost2VampireKiller); //No sé si ponerlo en Game o Scene
             }
             break;
@@ -228,7 +230,7 @@ AppStatus Game::Update()
             else if (IsKeyPressed(KEY_ENTER))
                 state = GameState::MAIN_MENU;
             break;
-        case GameState::END:
+        case GameState::ENDING:
             if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;
             if (IsKeyPressed(KEY_ENTER)) {
                 state = GameState::MAIN_MENU;
@@ -247,13 +249,13 @@ void Game::Render()
     switch (state)
     {
         case GameState::CREDITS:
-            DrawTexturePro(*img_CREDITS, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0 }, 0, WHITE);
+            DrawTexturePro(*credits_img, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0 }, 0, WHITE);
             //DrawTextureEx(*img_menu, Vector2() , 0, 2, WHITE);
             break;
 
         case GameState::INTRO:
             //playCreditsAnimation();
-            DrawTexturePro(*img_INTRO, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0 }, 0, WHITE);
+            DrawTexturePro(*intro_img, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0 }, 0, WHITE);
             break;
 
         case GameState::MAIN_MENU:

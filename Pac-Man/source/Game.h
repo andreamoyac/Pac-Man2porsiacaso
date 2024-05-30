@@ -30,11 +30,22 @@ private:
     Scene *scene;
     const Texture2D *img_menu;
     const Texture2D* maze_img;
+    const Texture2D* credits_img;
+    const Texture2D* intro_img;
+    const Texture2D* ending_img;
+
     bool animationFinished=false;
     bool animationFinished2=false;
 
-    Music Ost2PacMan;
-    Sound Ost2PacMan;
+
+    Music IntermissionPacman;
+    Music GameOverPacman;
+    Music ThemePacman;
+    Sound IntermissionPacmanSound;
+    Sound GameOverPacmanSound;
+    Sound ThemePacmanSound;
+
+    int timerIntro;
 
     //To work with original game units and then scale the result
     RenderTexture2D target;

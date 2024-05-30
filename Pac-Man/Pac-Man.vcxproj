@@ -147,13 +147,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\AABB.cpp" />
+    <ClCompile Include="source\Blinky.cpp" />
+    <ClCompile Include="source\Clyde.cpp" />
     <ClCompile Include="source\Enemy.cpp" />
     <ClCompile Include="source\EnemyManager.cpp" />
     <ClCompile Include="source\Entity.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\Globals.cpp" />
+    <ClCompile Include="source\Inky.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Object.cpp" />
+    <ClCompile Include="source\Pinky.cpp" />
     <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\RenderComponent.cpp" />
     <ClCompile Include="source\ResourceManager.cpp" />
@@ -166,13 +170,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\AABB.h" />
+    <ClInclude Include="source\Blinky.h" />
+    <ClInclude Include="source\Clyde.h" />
     <ClInclude Include="source\Enemy.h" />
     <ClInclude Include="source\EnemyManager.h" />
     <ClInclude Include="source\Entity.h" />
     <ClInclude Include="source\Game.h" />
     <ClInclude Include="source\Globals.h" />
+    <ClInclude Include="source\Inky.h" />
     <ClInclude Include="source\MemLeaks.h" />
     <ClInclude Include="source\Object.h" />
+    <ClInclude Include="source\Pinky.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\Point.h" />
     <ClInclude Include="source\RenderComponent.h" />
