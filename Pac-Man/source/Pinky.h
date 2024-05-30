@@ -3,7 +3,6 @@
 //#include "TileMap.h"
 
 
-enum class PinkyState { SCATTER, CHASE, FRIGHTENED, EATEN };
 enum class PinkyAnim {
 	EYES_LEFT, EYES_RIGHT, EYES_UP, EYES_DOWN,
 	WALKING_LEFT, WALKING_RIGHT, WALKING_UP, WALKING_DOWN,
@@ -20,20 +19,21 @@ struct PinkyStep
 class Pinky : public Enemy
 {
 public:
-	Pinky(const Point& p, int width, int height, int frame_size);
+	Pinky(const Point& p, int width, int height, int frame_size, Look look);
 	~Pinky();
 
 	//Initialize the enemy with the specified look and area
-	AppStatus Initialise(Look look, const AABB& area) override;
+	AppStatus Initialise(Look look, const AABB& area)override;
 
 
-	bool Update(const AABB& box) override;
+	bool Update(const AABB& box)override;
 
 
 private:
 	//Create the pattern behaviour
 	void InitPattern();
-
+	void MoveX();
+	void MoveY();
 	//Update looking direction according to the current step of the pattern
 	void UpdateLook(int anim_id);
 
@@ -43,3 +43,4 @@ private:
 	int current_frames;	//number of frames in the current step
 	std::vector<PinkyStep> pattern;
 };
+

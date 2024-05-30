@@ -1,8 +1,8 @@
 #include "EnemyManager.h"
-//#include "Blinky.h"
-//#include "Pinky.h"
-//#include "Inky.h"
-//#include "Clyde.h"
+#include "Blinky.h"
+#include "Pinky.h"
+#include "Inky.h"
+#include "Clyde.h"
 
 EnemyManager::EnemyManager()
 {
@@ -32,8 +32,8 @@ void EnemyManager::addEnemy(const Point& pos, EnemyType type, const AABB& area, 
 	Enemy* enemy;
 	if (type == EnemyType::BLINKY)
 	{
-		enemy = new Blinky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE);
-		enemy = new Pinky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE);
+		enemy = new Blinky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE, look);
+		enemy = new Pinky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE,look);
 		enemy = new Inky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE);
 		enemy = new Clyde(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE);
 

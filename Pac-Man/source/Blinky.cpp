@@ -1,8 +1,8 @@
 #include "Blinky.h"
 #include "Sprite.h"
 
-Blinky::Blinky(const Point& p, int width, int height, int frame_width, int frame_height, Look look) :
-	Enemy(p, width, height, frame_width, frame_height)
+Blinky::Blinky(const Point& p, int width, int height, int frame_size, Look look) :
+	Enemy(p, width, height, frame_size)
 {
 	state = State::SCATTER;
 
@@ -11,14 +11,14 @@ Blinky::Blinky(const Point& p, int width, int height, int frame_width, int frame
 	type = EnemyType::BLINKY;
 	this->look = look;
 }
-BlackLeopard::~BlackLeopard()
+Blinky::~Blinky()
 {
 }
-AppStatus BlackLeopard::Initialise(Look look, const AABB& area)
+AppStatus Blinky::Initialise(Look look, const AABB& area)
 {
 	int i;
-	const int n = BLACKLEOPARD_FRAME_SIZE_WIDTH;
-	const int h = BLACKLEOPARD_FRAME_SIZE_HEIGHT;
+	const int n = ENEMY_FRAME_SIZE;
+	const int h = ENEMY_FRAME_SIZE;
 
 	ResourceManager& data = ResourceManager::Instance();
 	render = new Sprite(data.GetTexture(Resource::IMG_ENEMIES));
@@ -29,107 +29,83 @@ AppStatus BlackLeopard::Initialise(Look look, const AABB& area)
 	}
 
 	Sprite* sprite = dynamic_cast<Sprite*>(render);
-	sprite->SetNumberAnimations((int)BlackLeopardAnim::NUM_ANIMATIONS);
+	sprite->SetNumberAnimations((int)BlinkyAnim::NUM_ANIMATIONS);
 
-	sprite->SetAnimationDelay((int)BlackLeopardAnim::STANDING_LEFT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)BlackLeopardAnim::STANDING_LEFT, { (float)0 * n, 4 * h, -n, h });
 
-	sprite->SetAnimationDelay((int)BlackLeopardAnim::STANDING_RIGHT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)BlackLeopardAnim::STANDING_RIGHT, { (float)0 * n, 4 * h, n, h });
 
-	sprite->SetAnimationDelay((int)BlackLeopardAnim::JUMPING_LEFT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)BlackLeopardAnim::JUMPING_LEFT, { (float)2 * n, 4 * h, -n, h });
+	sprite->SetAnimationDelay((int)BlinkyAnim::EYES_LEFT, ANIM_DELAY);
+	sprite->AddKeyFrame((int)BlinkyAnim::EYES_LEFT, { (float)0 * n, 4 * h, -n, h });
 
-	sprite->SetAnimationDelay((int)BlackLeopardAnim::JUMPING_RIGHT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)BlackLeopardAnim::JUMPING_RIGHT, { (float)2 * n, 4 * h, n, h });
+	sprite->SetAnimationDelay((int)BlinkyAnim::EYES_RIGHT, ANIM_DELAY);
+	sprite->AddKeyFrame((int)BlinkyAnim::EYES_RIGHT, { (float)0 * n, 4 * h, n, h });
 
-	sprite->SetAnimationDelay((int)BlackLeopardAnim::RUNNING_LEFT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)BlackLeopardAnim::RUNNING_LEFT, { (float)1 * n, 4 * h, -n, h });
-	sprite->AddKeyFrame((int)BlackLeopardAnim::RUNNING_LEFT, { (float)2 * n, 4 * h, -n, h });
-	sprite->AddKeyFrame((int)BlackLeopardAnim::RUNNING_LEFT, { (float)3 * n, 4 * h, -n, h });
+	sprite->SetAnimationDelay((int)BlinkyAnim::EYES_UP, ANIM_DELAY);
+	sprite->AddKeyFrame((int)BlinkyAnim::EYES_UP, { (float)2 * n, 4 * h, -n, h });
 
-	sprite->SetAnimationDelay((int)BlackLeopardAnim::RUNNING_RIGHT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)BlackLeopardAnim::RUNNING_RIGHT, { (float)1 * n, 4 * h, -n, h });
-	sprite->AddKeyFrame((int)BlackLeopardAnim::RUNNING_RIGHT, { (float)2 * n, 4 * h, -n, h });
-	sprite->AddKeyFrame((int)BlackLeopardAnim::RUNNING_RIGHT, { (float)3 * n, 4 * h, -n, h });
+	sprite->SetAnimationDelay((int)BlinkyAnim::EYES_DOWN, ANIM_DELAY);
+	sprite->AddKeyFrame((int)BlinkyAnim::EYES_DOWN, { (float)2 * n, 4 * h, -n, h });
 
-	if (look == Look::LEFT)        sprite->SetAnimation((int)BlackLeopardAnim::STANDING_LEFT);
-	else if (look == Look::RIGHT) sprite->SetAnimation((int)BlackLeopardAnim::STANDING_RIGHT);
+
+
+	sprite->SetAnimationDelay((int)BlinkyAnim::WALKING_LEFT, ANIM_DELAY);
+	sprite->AddKeyFrame((int)BlinkyAnim::WALKING_LEFT, { (float)2 * n, 4 * h, n, h });
+	
+	sprite->SetAnimationDelay((int)BlinkyAnim::WALKING_RIGHT, ANIM_DELAY);
+	sprite->AddKeyFrame((int)BlinkyAnim::WALKING_RIGHT, { (float)2 * n, 4 * h, n, h });
+
+	sprite->SetAnimationDelay((int)BlinkyAnim::WALKING_UP, ANIM_DELAY);
+	sprite->AddKeyFrame((int)BlinkyAnim::WALKING_UP, { (float)2 * n, 4 * h, n, h });
+
+	sprite->SetAnimationDelay((int)BlinkyAnim::WALKING_DOWN, ANIM_DELAY);
+	sprite->AddKeyFrame((int)BlinkyAnim::WALKING_DOWN, { (float)2 * n, 4 * h, n, h });
+
+
 
 	visibility_area = area;
-
 	//InitPattern();
 
 	return AppStatus::OK;
 }
-//void BlackLeopard::InitPattern()
-//{
-//	//Multiplying by 3 ensures sufficient time for displaying all 3 frames of the
-//	//walking animation, resulting in smoother transitions and preventing the animation
-//	//from appearing rushed or incomplete
-//	const int n = BLACKLEOPARD_ANIM_DELAY * 3;
-//
-//	if (look == Look::LEFT)
-//	{
-//		pattern.push_back({ {-BLACKLEOPARD_SPEED, 0}, /*n*/0, (int)BlackLeopardAnim::STANDING_LEFT });
-//
-//	}
-//	else
-//		pattern.push_back({ {BLACKLEOPARD_SPEED, 0}, /*n*/0, (int)BlackLeopardAnim::STANDING_RIGHT });
-//
-//	current_step = 0;
-//	current_frames = 0;
-//}
-bool BlackLeopard::Update(const AABB& box)
+
+bool Blinky::Update(const AABB& box)
 {
 	Sprite* sprite = dynamic_cast<Sprite*>(render);
 	bool shoot = false;
 	int anim_id;
 
-	if (state == BlackLeopardState::STANDING)
+	if (state == State::FRIGHTENED)
 	{
 		//state = BlackLeopardState::RUNNING;
 
 	}
-	else if (state == BlackLeopardState::RUNNING)
+	else if (state == State::CHASE)
 	{
 		MoveX();
 		if (look == Look::LEFT)
 		{
-			sprite->SetAnimation((int)BlackLeopardAnim::RUNNING_LEFT);
+			sprite->SetAnimation((int)BlinkyAnim::WALKING_LEFT);
 		}
-		else
+		else if(look==Look::RIGHT)
 		{
-			sprite->SetAnimation((int)BlackLeopardAnim::RUNNING_RIGHT);
+			sprite->SetAnimation((int)BlinkyAnim::WALKING_RIGHT);
 		}
+		else if (look == Look::UP)
+		{
+			sprite->SetAnimation((int)BlinkyAnim::WALKING_UP);
+		}
+		else if (look == Look::DOWN)
+		{
+			sprite->SetAnimation((int)BlinkyAnim::WALKING_DOWN);
+		}
+	}
+	else if (state == State::SCATTER) {
+
+	}
+	else if (state == State::EATEN) {
+
 	}
 
 	sprite->Update();
-
-	//current_frames++;
-
-	//if (current_frames == pattern[current_step].frames)
-	//{
-	//	current_step++;
-	//	current_step %= pattern.size();
-	//	current_frames = 0;
-
-	//	anim_id = pattern[current_step].anim;
-	//	sprite->SetAnimation(anim_id);
-	//	UpdateLook(anim_id);
-	//}
-
-	//if (pos.x == -10)
-	//	alive = false;
-	//pos.x = 299;
-//delete this;	
-
-	//else if (pos.x == 300)
-	//	alive = false
-		//pos.x = -9;
-
-
-
 	MoveY();
 
 
@@ -137,57 +113,31 @@ bool BlackLeopard::Update(const AABB& box)
 
 	return shoot;
 }
-void BlackLeopard::MoveX()
+void Blinky::MoveX()
 {
-	if (look == Look::LEFT)
-		pos.x -= BLACKLEOPARD_SPEED;
-	else
-		pos.x += BLACKLEOPARD_SPEED;
-
-
-	//AABB box;
-	//pos += pattern[current_step].speed;
+	if (look == Look::LEFT) {
+		pos.x -= ENEMY_SPEED;
+	}
+	else if (look==Look::RIGHT)
+	{
+		pos.x += ENEMY_SPEED;
+	}
 
 }
-void BlackLeopard::MoveY()
+void Blinky::MoveY()
 {
-	//pos.y += BLACKLEOPARD_SPEED * 2;
-	//AABB box, prev_box;
-
-	//box = GetHitbox();
-	//int prev_y;
-
-	// For this reason this prevents zombie from going through the floor
-	// even though it has nothing inside...
-	//if (map->TestCollisionGround(box, &pos.y))
-	//{
-
-	//}
-	//{
-
-	//}
-
-
-		//A ground collision occurs if we were not in a collision state previously.
-		//This prevents scenarios where, after levitating due to a previous jump, we found
-		//ourselves inside a tile, and the entity would otherwise be placed above the tile,
-		//crossing it.
-		//if (!map->TestCollisionGround(prev_box, &prev_y) &&
-		//	map->TestCollisionGround(box, &pos.y))
-		//{
-		//	dir = { 0,0 };
-		//}
+	if (look == Look::DOWN) {
+		pos.y -= ENEMY_SPEED;
+	}
+	else if (look == Look::UP)
+	{
+		pos.y += ENEMY_SPEED;
+	}
 
 }
-//void Zombie::SetTileMap(TileMap* tilemap)
-//{
-//	map = tilemap;
-//}
-void BlackLeopard::UpdateLook(int anim_id)
+
+void Blinky::UpdateLook(int anim_id)
 {
-	BlackLeopardAnim anim = (BlackLeopardAnim)anim_id;
-	look = anim == BlackLeopardAnim::STANDING_LEFT ? Look::LEFT : Look::RIGHT;
-}
-void BlackLeopard::GetShootingPosDir(Point* p, Point* d) const
-{
+	BlinkyAnim anim = (BlinkyAnim)anim_id;
+	look = anim == BlinkyAnim::WALKING_DOWN ? Look::LEFT : Look::RIGHT;//?
 }

@@ -10,10 +10,9 @@ Object::Object(const Point& p, ObjectType t) : Entity(p, OBJECT_PHYSICAL_SIZE, O
 	switch (type)
 	{
 		case ObjectType::APPLE: rc = {4*n, 3*n, n, n}; break;
-		case ObjectType::CHILI: rc = {5*n, 3*n, n, n}; break;
 		case ObjectType::PELLET: rc = { 4 * n, 3 * n, n, n }; break;
 		case ObjectType::ENERGIZER: rc = { 5 * n, 3 * n, n, n }; break;
-		case ObjectType::GHOST:rc= { 5 * n, 3 * n, n, n }; break;
+		//case ObjectType::GHOST:rc= { 5 * n, 3 * n, n, n }; break;
 
 		default: LOG("Internal error: object creation of invalid type");
 	}
@@ -31,7 +30,6 @@ void Object::DrawDebug(const Color& col) const
 int Object::Points() const
 {
 	if (type == ObjectType::APPLE)		return POINTS_APPLE;
-	else if (type == ObjectType::CHILI)	return POINTS_CHILI;
 	else if (type == ObjectType::PELLET)	return POINTS_PELLET;
 	else if (type == ObjectType::ENERGIZER)	return POINTS_ENERGIZER;
 	else

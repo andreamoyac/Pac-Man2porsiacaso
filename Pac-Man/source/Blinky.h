@@ -19,20 +19,21 @@ struct BlinkyStep
 class Blinky : public Enemy
 {
 public:
-	Blinky(const Point& p, int width, int height, int frame_size);
+	Blinky(const Point& p, int width, int height, int frame_size, Look look);
 	~Blinky();
 
 	//Initialize the enemy with the specified look and area
 	AppStatus Initialise(Look look, const AABB& area) override;
 
 
-	bool Update(const AABB& box) override;
+	bool Update(const AABB& box)override;
 
 
 private:
 	//Create the pattern behaviour
 	void InitPattern();
-
+	void MoveX();
+	void MoveY();
 	//Update looking direction according to the current step of the pattern
 	void UpdateLook(int anim_id);
 

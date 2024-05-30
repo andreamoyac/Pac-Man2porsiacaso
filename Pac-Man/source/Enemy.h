@@ -25,17 +25,20 @@ class Enemy : public Entity
 {
 public:
 	Enemy(const Point& p, int width, int height, int frame_size);
-	~Enemy();
+	virtual ~Enemy();
 
 	void DrawVisibilityArea(const Color& col) const;
-	AppStatus Initialise();
-
+	virtual AppStatus Initialise(Look look, const AABB& area) = 0;
+	virtual bool Update(const AABB& box) = 0;
 
 	EnemyType type;
 	TileMap* map;
-	void Update();
+
 protected:
 	State currentState;
+	State state;
+	Look look;
+	AABB visibility_area;
 private:
 	bool IsLookingRight() const;
 	bool IsLookingLeft() const;
@@ -60,11 +63,6 @@ private:
 	void ChangeAnimDown();
 	
 	void onEaten();
-
-
-	State state;
-	Look look;
-	AABB visibility_area;
 
 };
 
