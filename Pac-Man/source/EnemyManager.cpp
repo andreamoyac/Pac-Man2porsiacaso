@@ -4,13 +4,8 @@
 #include "Inky.h"
 #include "Clyde.h"
 
-EnemyManager::EnemyManager()
-{
-}
-EnemyManager::~EnemyManager()
-{
-	Release();
-}
+EnemyManager::EnemyManager() {}
+EnemyManager::~EnemyManager(){}
 AppStatus EnemyManager::Initialise()
 {
 	ResourceManager& data = ResourceManager::Instance();
@@ -32,11 +27,26 @@ void EnemyManager::addEnemy(const Point& pos, EnemyType type, const AABB& area, 
 	Enemy* enemy;
 	if (type == EnemyType::BLINKY)
 	{
-		enemy = new Blinky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE, look);
-		enemy = new Pinky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE,look);
-		enemy = new Inky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE);
-		enemy = new Clyde(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE);
-
+		enemy = new Blinky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE, Look::RIGHT);
+		enemy->map = this->map;
+	}
+	else if (type == EnemyType::PINKY) {
+		enemy = new Pinky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE, Look::RIGHT);
+		enemy->map = this->map;
+	}
+	else if (type == EnemyType::INKY) {
+		enemy = new Inky(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE, Look::RIGHT);
+		enemy->map = this->map;
+	}
+	else if (type == EnemyType::CLYDE) {
+		enemy = new Clyde(pos, ENEMY_PHYSICAL_WIDTH, ENEMY_PHYSICAL_HEIGHT, ENEMY_FRAME_SIZE, Look::RIGHT);
+		enemy->map = this->map;
+	}
+	else
+	{
+		LOG("Internal error: trying to add a new enemy with invalid type");
+		return;
+	}
 	enemy->Initialise(look, area);
 	enemies.push_back(enemy);
 }
@@ -48,7 +58,17 @@ AABB EnemyManager::GetEnemyHitBox(const Point& pos, EnemyType type) const
 		width = ENEMY_FRAME_SIZE;
 		height = ENEMY_FRAME_SIZE;
 	}
-	else if (type == EnemyType::TURRET)
+	else if (type == EnemyType::PINKY)
+	{
+		width = ENEMY_FRAME_SIZE;
+		height = ENEMY_FRAME_SIZE;
+	}
+	else if (type == EnemyType::INKY)
+	{
+		width = ENEMY_FRAME_SIZE;
+		height = ENEMY_FRAME_SIZE;
+	}
+	else if (type == EnemyType::CLYDE)
 	{
 		width = ENEMY_FRAME_SIZE;
 		height = ENEMY_FRAME_SIZE;
@@ -62,8 +82,35 @@ AABB EnemyManager::GetEnemyHitBox(const Point& pos, EnemyType type) const
 	AABB hitbox(p, width, height);
 	return hitbox;
 }
-void EnemyManager::Update(const AABB& player_hitbox)
+void EnemyManager::Update(const AABB& player_hitbox, const AABB& weapon_hitbox, int& score)
 {
+	AABB box;
+	Point p, d;
+	//TODO: Add enemy collisions.
+	//box = enemy->GetHitbox();
+
+	// TODO: Give tilemap to enemies to give collisions
+	
+	
+	for (Enemy* enemy : enemies)
+	{
+		box = enemy->GetHitbox();
+		if (box.TestAABB(player_hitbox) && enemy->IsAlive())
+		{
+			
+		}
+
+		
+
+		//if (enemy->IsAlive() == false)
+		//{
+		//	if (totalEnemies <= 0)
+		//	{
+		//		delete enemy;
+		//		enemies.clear();
+		//	}
+		//}
+	}
 }
 void EnemyManager::Draw() const
 {

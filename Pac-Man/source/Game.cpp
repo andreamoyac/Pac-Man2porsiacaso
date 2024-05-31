@@ -5,10 +5,13 @@
 
 Game::Game()
 {
-    state = GameState::INTRO;
+    state = GameState::CREDITS;
     scene = nullptr;
     img_menu = nullptr;
     maze_img = nullptr;
+    creditsimg = nullptr;
+    intro_img = nullptr;
+    ending_img = nullptr;
 
     target = {};
     src = {};
@@ -52,8 +55,6 @@ AppStatus Game::Initialise(float scale)
         return AppStatus::ERROR;
     }
 
-    //transition effect
-    transition.Set(GameState::MAIN_MENU, 5, dst);
 
     //Set the target frame rate for the application
     SetTargetFPS(60);
@@ -81,7 +82,7 @@ AppStatus Game::LoadResources()
     {
         return AppStatus::ERROR;
     }
-    credits_img = data.GetTexture(Resource::IMG_CREDITS);
+    creditsimg = data.GetTexture(Resource::IMG_CREDITS);
     if (data.LoadTexture(Resource::IMG_INTRO, "images/INTRO.png") != AppStatus::OK)
     {
         return AppStatus::ERROR;
@@ -99,7 +100,7 @@ AppStatus Game::LoadResources()
     GameOverPacman = LoadMusicStream("Sound/Music/Pacman_Game_over.ogg");
     ThemePacman = LoadMusicStream("Sound/Music/Pacman_theme_OGG.ogg");
     ThemePacman.looping = true;
-    //SetMusicVolume(Ost2PPacman, 1.0);
+    SetMusicVolume(ThemePacman, 0.5);
 
 
     return AppStatus::OK;
@@ -108,7 +109,7 @@ AppStatus Game::BeginPlay()
 {
     scene = new Scene();
 
-    //PlayMusicStream(Ost2PacMan);
+    PlayMusicStream(ThemePacman);
     if (scene == nullptr)
     {
         LOG("Failed to allocate memory for Scene");
@@ -125,43 +126,31 @@ AppStatus Game::BeginPlay()
 void Game::FinishPlay()
 {
     scene->Release();
-    //StopMusicStream(Ost2PacMan);
+    StopMusicStream(ThemePacman);
     delete scene;
     scene = nullptr;
-}
-void Game::playCreditsAnimation()
-{
-   //play animation
-    WaitTime(5);
-    animationFinished2 = true;
-}
-void Game::playIntroAnimation()
-{
-    //play animation
-    WaitTime(5);
-    animationFinished = true;
 }
 AppStatus Game::Update()
 {
     //Check if user attempts to close the window, either by clicking the close button or by pressing Alt+F4
     if(WindowShouldClose()) return AppStatus::QUIT;
-    if (transition.IsActive())
-    {
-        GameState prev_frame = state;
-        state = transition.Update();
+    //if (transition.IsActive())
+    //{
+    //    GameState prev_frame = state;
+    //    //state = transition.Update();
 
-        //Start and finish delayed due to the fading transition
-        if (prev_frame == GameState::MAIN_MENU && state == GameState::PLAYING)
-        {
-            if (BeginPlay() != AppStatus::OK) return AppStatus::ERROR;
-        }
-        else if (prev_frame == GameState::PLAYING && state == GameState::MAIN_MENU)
-        {
-            FinishPlay();
-        }
-    }
-    else
-    {
+    //    //Start and finish delayed due to the fading transition
+    //    if (prev_frame == GameState::MAIN_MENU && state == GameState::PLAYING)
+    //    {
+    //        if (BeginPlay() != AppStatus::OK) return AppStatus::ERROR;
+    //    }
+    //    else if (prev_frame == GameState::PLAYING && state == GameState::MAIN_MENU)
+    //    {
+    //        FinishPlay();
+    //    }
+    //}
+    //else
+    //{
         switch (state)
         {
         case GameState::CREDITS:
@@ -178,21 +167,20 @@ AppStatus Game::Update()
             break;
         case GameState::MAIN_MENU:
             if (IsKeyPressed(KEY_ESCAPE)) return AppStatus::QUIT;
-            if (IsKeyPressed(KEY_ENTER))
+            if (IsKeyPressed(KEY_SPACE))
             {
                 if (BeginPlay() != AppStatus::OK) return AppStatus::ERROR;
                 state = GameState::PLAYING;
-                //transition.Set(GameState::MAIN_MENU, 5, GameState::PLAYING, 5, dst);
-                //PlayMusicStream(Ost2VampireKiller); //No sé si ponerlo en Game o Scene
+                transition.Set(GameState::MAIN_MENU, 5, GameState::PLAYING, 5, dst);
             }
             break;
 
         case GameState::PLAYING:
             if (IsKeyPressed(KEY_ESCAPE))
             {
-                FinishPlay();
+                //FinishPlay();
                 state = GameState::MAIN_MENU;
-                transition.Set(GameState::PLAYING, 5, GameState::MAIN_MENU, 5, dst);
+               transition.Set(GameState::PLAYING, 5, GameState::MAIN_MENU, 5, dst);
 
                 //StopMusicStream(Ost2PacMan);
             }
@@ -220,10 +208,11 @@ AppStatus Game::Update()
             {
                 //Game logic
                 scene->Update();
-                //UpdateMusicStream(Ost2PacMan);
+                UpdateMusicStream(ThemePacman);
                 return AppStatus::OK;
             }
             break;
+        
         case GameState::GAME_OVER:
             if (IsKeyPressed(KEY_ESCAPE))
                 return AppStatus::QUIT;
@@ -237,9 +226,11 @@ AppStatus Game::Update()
             }
             break;
         }
+        return AppStatus::OK;
     }
-    return AppStatus::OK;
-}
+
+ /*   return AppStatus::OK;
+}*/
 void Game::Render()
 {
     //Draw everything in the render texture, note this will not be rendered on screen, yet
@@ -249,8 +240,8 @@ void Game::Render()
     switch (state)
     {
         case GameState::CREDITS:
-            DrawTexturePro(*credits_img, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0 }, 0, WHITE);
-            //DrawTextureEx(*img_menu, Vector2() , 0, 2, WHITE);
+            DrawTexturePro(*creditsimg, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT }, { 0,0 }, 0, WHITE);
+            //DrawTextureEx(*creditsimg, Vector2() , 0, 2, WHITE);
             break;
 
         case GameState::INTRO:
@@ -264,7 +255,7 @@ void Game::Render()
             break;
         case GameState::PLAYING:
             scene->Render();
-            //DrawTextureEx(*maze_img, Vector2(), 0, 2, { 255,255,255,150 });
+            DrawTextureEx(*maze_img, Vector2(), 0, 2, { 255,255,255,150 });
             break;
     }
     
@@ -273,7 +264,7 @@ void Game::Render()
     //Draw render texture to screen, properly scaled
     BeginDrawing();
     DrawTexturePro(target.texture, src, dst, { 0, 0 }, 0.0f, WHITE);
-    if (transition.IsActive()) transition.Render();
+  /*  if (transition.IsActive()) transition.Render();*/
     EndDrawing();
 }
 void Game::Cleanup()
@@ -287,8 +278,11 @@ void Game::UnloadResources()
     ResourceManager& data = ResourceManager::Instance();
     data.ReleaseTexture(Resource::IMG_MENU);
     data.ReleaseTexture(Resource::MAZE_IMG);
+    data.ReleaseTexture(Resource::IMG_CREDITS);
+    data.ReleaseTexture(Resource::IMG_INTRO);
+    data.ReleaseTexture(Resource::IMG_ENDING);
     data.ReleaseSounds();
 
     UnloadRenderTexture(target);
-    //UnloadMusicStream(Ost2PacMan);
+    UnloadMusicStream(ThemePacman);
 }

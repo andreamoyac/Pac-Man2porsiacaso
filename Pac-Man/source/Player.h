@@ -15,8 +15,7 @@
 
 
 //Logic states
-enum class State { IDLE, WALKING, DEAD};
-enum class Look { RIGHT, LEFT, UP, DOWN };
+enum class StateP { IDLE, WALKING, DEAD};
 
 //Rendering states
 enum class PlayerAnim {
@@ -30,7 +29,7 @@ enum class PlayerAnim {
 class Player: public Entity
 {
 public:
-	Player(const Point& p, State s, Look view);
+	Player(const Point& p, StateP s, Look view);
 	~Player();
 	
 	AppStatus Initialise();
@@ -52,8 +51,8 @@ public:
 
 
 
-	int GetXPos();
-	int GetYPos();
+	int GetPosX();
+	int GetPosY();
 
 	void Update();
 	void DrawDebug(const Color& col) const;
@@ -94,7 +93,7 @@ private:
 
 	void finishAnimation();
 
-	State state;
+	StateP state;
 	Look look;
 
 	TileMap *map;

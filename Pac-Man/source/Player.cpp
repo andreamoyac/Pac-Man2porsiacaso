@@ -5,7 +5,7 @@
 #include <raymath.h>
 #include "raylib.h" 
 
-Player::Player(const Point& p, State s, Look view) :
+Player::Player(const Point& p, StateP s, Look view) :
 	Entity(p, PLAYER_PHYSICAL_WIDTH, PLAYER_PHYSICAL_HEIGHT, PLAYER_FRAME_SIZE, PLAYER_FRAME_SIZE)
 {
 	state = s;
@@ -45,7 +45,7 @@ AppStatus Player::Initialise()
 	sprite->SetAnimationDelay((int)PlayerAnim::IDLE_UP, ANIM_DELAY);
 	sprite->AddKeyFrame((int)PlayerAnim::IDLE_UP, { 2*n, 6*n, 2*n, 2*n });
 	sprite->SetAnimationDelay((int)PlayerAnim::IDLE_DOWN, ANIM_DELAY);
-	sprite->AddKeyFrame((int)PlayerAnim::IDLE_DOWN, { 2 * n, 0, 2 * n, 2 * n });
+	sprite->AddKeyFrame((int)PlayerAnim::IDLE_DOWN, { 2 * n, 4*n, 2*n, 2*n });
 	sprite->SetAnimationDelay((int)PlayerAnim::IDLE_LEFT, ANIM_DELAY);
 	sprite->AddKeyFrame((int)PlayerAnim::IDLE_LEFT, { 2 * n, 2 * n, 2 * n, 2 * n });
 	sprite->SetAnimationDelay((int)PlayerAnim::IDLE_RIGHT, ANIM_DELAY);
@@ -130,11 +130,11 @@ void Player::SetGameEnd(bool state)
 {
 	gameEnd = state;
 }
-int Player::GetXPos()
+int Player::GetPosX()
 {
 	return pos.x;
 }
-int Player::GetYPos()
+int Player::GetPosY()
 {
 	return pos.y;
 }
@@ -183,7 +183,7 @@ PlayerAnim Player::GetAnimation()
 void Player::Stop()
 {
 	dir = { 0,0 };
-	state = State::IDLE;
+	state = StateP::IDLE;
 	if (IsLookingRight())	SetAnimation((int)PlayerAnim::IDLE_RIGHT);
 	else if(IsLookingLeft()) SetAnimation((int)PlayerAnim::IDLE_LEFT);
 	else if (IsLookingDown()) SetAnimation((int)PlayerAnim::IDLE_DOWN);
@@ -191,32 +191,32 @@ void Player::Stop()
 }
 void Player::StartWalkingLeft()
 {
-	state = State::WALKING;
+	state = StateP::WALKING;
 	look = Look::LEFT;
 	SetAnimation((int)PlayerAnim::WALKING_LEFT);
 }
 void Player::StartWalkingRight()
 {
-	state = State::WALKING;
+	state = StateP::WALKING;
 	look = Look::RIGHT;
 	SetAnimation((int)PlayerAnim::WALKING_RIGHT);
 }
 void Player::StartWalkingUp()
 {
-	state = State::WALKING;
+	state = StateP::WALKING;
 	look = Look::UP;
 	SetAnimation((int)PlayerAnim::WALKING_UP);
 }
 void Player::StartWalkingDown()
 {
-	state = State::WALKING;
+	state = StateP::WALKING;
 	look = Look::DOWN;
 	SetAnimation((int)PlayerAnim::WALKING_DOWN);
 }
 void Player::Death()
 {
 	Dead = true;
-	state = State::DEAD;
+	state = StateP::DEAD;
 	lives--;
 	
 	SetAnimation((int)PlayerAnim::DEATH);
@@ -245,8 +245,8 @@ void Player::ChangeAnimRight()
 	look = Look::RIGHT;
 	switch (state)
 	{
-		case State::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_RIGHT);    break; 
-		case State::WALKING: SetAnimation((int)PlayerAnim::WALKING_RIGHT); break;
+		case StateP::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_RIGHT);    break; 
+		case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_RIGHT); break;
 	}
 }
 void Player::ChangeAnimLeft()
@@ -254,8 +254,8 @@ void Player::ChangeAnimLeft()
 	look = Look::LEFT;
 	switch (state)
 	{
-		case State::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_LEFT);    break;
-		case State::WALKING: SetAnimation((int)PlayerAnim::WALKING_LEFT); break;
+		case StateP::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_LEFT);    break;
+		case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_LEFT); break;
 	}
 }
 void Player::ChangeAnimUp()
@@ -263,8 +263,8 @@ void Player::ChangeAnimUp()
 	look = Look::UP;
 	switch (state)
 	{
-	case State::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_UP);    break;
-	case State::WALKING: SetAnimation((int)PlayerAnim::WALKING_UP); break;
+	case StateP::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_UP);    break;
+	case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_UP); break;
 	}
 }
 void Player::ChangeAnimDown()
@@ -272,8 +272,8 @@ void Player::ChangeAnimDown()
 	look = Look::DOWN;
 	switch (state)
 	{
-	case State::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_DOWN);    break;
-	case State::WALKING: SetAnimation((int)PlayerAnim::WALKING_DOWN); break;
+	case StateP::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_DOWN);    break;
+	case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_DOWN); break;
 	}
 }
 void Player::Update()
@@ -295,7 +295,7 @@ void Player::MoveX()
 	if (IsKeyDown(KEY_LEFT))
 	{
 		pos.x += -PLAYER_SPEED;
-		if (state == State::IDLE) StartWalkingLeft();
+		if (state == StateP::IDLE) StartWalkingLeft();
 		else
 		{
 			if (IsLookingRight()) ChangeAnimLeft();
@@ -305,13 +305,13 @@ void Player::MoveX()
 		if (map->TestCollisionWallLeft(box))
 		{
 			pos.x = prev_x;
-			if (state == State::WALKING) Stop();
+			if (state == StateP::WALKING) Stop();
 		}
 	}
 	else if (IsKeyDown(KEY_RIGHT))
 	{
 		pos.x += PLAYER_SPEED;
-		if (state == State::IDLE) StartWalkingRight();
+		if (state == StateP::IDLE) StartWalkingRight();
 		else
 		{
 			if (IsLookingLeft()) ChangeAnimRight();
@@ -321,13 +321,34 @@ void Player::MoveX()
 		if (map->TestCollisionWallRight(box))
 		{
 			pos.x = prev_x;
-			if (state == State::WALKING) Stop();
+			if (state == StateP::WALKING) Stop();
 		}
 	}
 	else
 	{
+		if (state == StateP::WALKING) Stop();
+	}
+	/*pos.x += PLAYER_SPEED;
+	if (state == StateP::IDLE)
+		StartWalkingRight();
+	else if ((IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) && Dead == false && state != StateP::WALKING)
+	{
+	pos.x += PLAYER_SPEED;
+	if (state == State::IDLE)
+		StartWalkingRight();
+	else if (state == State::CROUCHING) StartWalkingRight();
+	else
+	{
+		if (IsLookingLeft()) ChangeAnimRight();
+	}
+
+	box = GetHitbox();
+	if (map->TestCollisionWallRight(box))
+	{
+		pos.x = prev_x;
 		if (state == State::WALKING) Stop();
 	}
+	}*/
 }
 void Player::MoveY()
 {
@@ -338,7 +359,7 @@ void Player::MoveY()
 	if (IsKeyDown(KEY_UP))
 	{
 		pos.y += -PLAYER_SPEED;
-		if (state == State::IDLE) StartWalkingUp();
+		if (state == StateP::IDLE) StartWalkingUp();
 		else
 		{
 			if (IsLookingDown()) ChangeAnimUp();
@@ -348,13 +369,13 @@ void Player::MoveY()
 		if (map->TestCollisionWallUp(box))
 		{
 			pos.y = prev_y;
-			if (state == State::WALKING) Stop();
+			if (state == StateP::WALKING) Stop();
 		}
 	}
 	else if (IsKeyDown(KEY_DOWN))
 	{
 		pos.y += PLAYER_SPEED;
-		if (state == State::IDLE) StartWalkingDown();
+		if (state == StateP::IDLE) StartWalkingDown();
 		else
 		{
 			if (IsLookingUp()) ChangeAnimDown();
@@ -364,12 +385,12 @@ void Player::MoveY()
 		if (map->TestCollisionWallDown(box))
 		{
 			pos.y = prev_y;
-			if (state == State::WALKING) Stop();
+			if (state == StateP::WALKING) Stop();
 		}
 	}
 	else
 	{
-		if (state == State::WALKING) Stop();
+		if (state == StateP::WALKING) Stop();
 	}
 		
 	}

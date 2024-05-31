@@ -11,21 +11,26 @@ ResourceManager::~ResourceManager()
 
 AppStatus ResourceManager::LoadTexture(Resource id, const std::string& file_path)
 {
+    //Load the texture
     Texture2D texture = ::LoadTexture(file_path.c_str());
     if (texture.id == 0)
     {
+        //Error loading texture
         LOG("Failed to load texture ", file_path);
         return AppStatus::ERROR;
     }
-    
+
+    //Insert the loaded texture into the map with the specified key
     textures[id] = texture;
     return AppStatus::OK;
 }
 
 void ResourceManager::ReleaseTexture(Resource id)
 {
+    //Find the texture associated with the key
     auto it = textures.find(id);
 
+    //If found, unload the texture and remove it from the map
     if (it != textures.end())
     {
         UnloadTexture(it->second);

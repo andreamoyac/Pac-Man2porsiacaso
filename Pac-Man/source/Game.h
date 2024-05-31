@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "Transition.h"
 
-enum class GameState { MAIN_MENU, PLAYING, CREDITS, INTRO, GAME_OVER, END };
+
 
 class Game
 {
@@ -16,8 +16,6 @@ public:
     void Render();
     void Cleanup();
    
-    void playCreditsAnimation();
-    void playIntroAnimation();
 
 private:
     AppStatus BeginPlay();
@@ -28,9 +26,10 @@ private:
 
     GameState state;
     Scene *scene;
+
+    const Texture2D* creditsimg;
     const Texture2D *img_menu;
     const Texture2D* maze_img;
-    const Texture2D* credits_img;
     const Texture2D* intro_img;
     const Texture2D* ending_img;
 

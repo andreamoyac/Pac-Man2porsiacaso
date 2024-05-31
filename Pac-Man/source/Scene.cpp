@@ -60,7 +60,7 @@ Scene::~Scene()
 AppStatus Scene::Init()
 {
 	//Create player
-	player = new Player({ 0,0 }, State::IDLE, Look::UP);
+	player = new Player({ 0,0 }, StateP::IDLE, Look::UP);
 	if (player == nullptr)
 	{
 		LOG("Failed to allocate memory for Player");
@@ -127,13 +127,13 @@ AppStatus Scene::Init()
 		return AppStatus::ERROR;
 	}
 	//Initialise text font
-	if (font->Initialise(Resource::IMG_FONT, "img/fontywh.png", '0', 8) != AppStatus::OK)
+	if (font->Initialise(Resource::IMG_FONT, "images/fontywh.png", '0', 8) != AppStatus::OK)
 	{
 		LOG("Failed to initialise font image");
 		return AppStatus::ERROR;
 	}
 
-	transition.SetScene(1, 10, 10);
+	//transition.SetScene(1, 10, 10);
 
 	return AppStatus::OK;
 }
@@ -347,11 +347,10 @@ AppStatus Scene::LoadLevel(int stage)
 			}
 			else if (tile == Tile::BLINKY_RED)
 			{
-				pos.x += (GHOST_FRAME_SIZE_WIDTH - GHOST_PHYSICAL_WIDTH) / 2;
-				hitbox = enemies->GetEnemyHitBox(pos, EnemyType::GHOST);
+				pos.x += (ENEMY_FRAME_SIZE - ENEMY_PHYSICAL_WIDTH) / 2;
+				hitbox = enemies->GetEnemyHitBox(pos, EnemyType::BLINKY);
 				area = level->GetSweptAreaX(hitbox); //?
-				enemies->Add(pos, EnemyType::GHOST, area);
-				enemies->totalEnemies++;
+				enemies->addEnemy(pos, EnemyType::BLINKY, area, Look::DOWN);
 			}
 			else if (tile == Tile::ENERGIZER)
 			{
@@ -384,65 +383,52 @@ void Scene::Update()
 	{
 		timer = 0;
 	}
-	if (player->GetHasDied() == true)
+	if (player->GetDead() == true)
 	{
-		ResetScreenTimer();
+		TimerReset();
 
 		if (timerComparision + 180 == timer)
-			ResetScreen();
+			ScreenReset();
 	} //no comprendo
 
 	Point p1, p2;
-	AABB box;
+	AABB hitbox;
 
-	if (transition.IsActive())
-	{
-		transition.Update();
-	}
-	else {
-		if (player->GetPosX() == 0 && currentLevel == 4)
-		{
-			transition.SetScene(currentLevel - 1, currentLevel, 10, 10);
-			int PosYtmp = player->GetPosY() - 16;
-			LoadLevel(currentLevel - 1);
-			player->SetPos(Point(WINDOW_WIDTH - (PLAYER_PHYSICAL_WIDTH + 10), PosYtmp));
-			currentLevel--;
-		}
-		else if (player->GetPosX() == WINDOW_WIDTH - PLAYER_PHYSICAL_WIDTH && currentLevel == 3)
-		{
-			transition.SetScene(currentLevel + 1, currentLevel, 10, 10);
-			int PosYtmp = player->GetPosY() + 16;
-			LoadLevel(currentLevel + 1);
-			player->SetPos(Point(10, PosYtmp));
-			currentLevel++;
-		}
-		else if (player->GetPosX() == 0 && currentLevel > 1)
-		{
-			transition.SetScene(currentLevel - 1, currentLevel, 10, 10);
-			int PosYtmp = player->GetPosY();
-			LoadLevel(currentLevel - 1);
-			player->SetPos(Point(WINDOW_WIDTH - (PLAYER_PHYSICAL_WIDTH + 10), PosYtmp));
-			currentLevel--;
-		}
-		else if (player->GetPosX() == WINDOW_WIDTH - PLAYER_PHYSICAL_WIDTH && currentLevel < 5)
-		{
-			transition.SetScene(currentLevel + 1, currentLevel, 10, 10);
-			int PosYtmp = player->GetPosY();
-			LoadLevel(currentLevel + 1);
-			player->SetPos(Point(10, PosYtmp));
-			currentLevel++;
-		}
-		else if (player->GetPosX() <= 0 && currentLevel == 1)
-		{
-			// TODO: Change this in the player.cpp --> Stop animations if a wall is hit
-			int PosYtmp = player->GetPosY();
-			player->SetPos(Point(0, PosYtmp));
-		}
-		else if (player->GetPosX() >= WINDOW_WIDTH - PLAYER_PHYSICAL_WIDTH && currentLevel == 4)
-		{
-			int PosYtmp = player->GetPosY();
-			player->SetPos(Point(WINDOW_WIDTH - PLAYER_PHYSICAL_WIDTH, PosYtmp));
-		}
+	//if (transition.IsActive())
+	//{
+	//	transition.Update();
+	//}
+	/*else {*/
+		//if (player->GetPosX() == WINDOW_WIDTH - PLAYER_PHYSICAL_WIDTH && currentLevel == 3)
+		//{
+		//	//transition.SetScene(currentLevel + 1, currentLevel, 10, 10);
+		//	int PosYtmp = player->GetPosY() + 16;
+		//	LoadLevel(currentLevel + 1);
+		//	player->SetPos(Point(10, PosYtmp));
+		//	currentLevel++;
+		//}
+		//else if (player->GetPosX() == 0 && currentLevel > 1)
+		//{
+		//	//transition.SetScene(currentLevel - 1, currentLevel, 10, 10);
+		//	int PosYtmp = player->GetPosY();
+		//	LoadLevel(currentLevel - 1);
+		//	player->SetPos(Point(WINDOW_WIDTH - (PLAYER_PHYSICAL_WIDTH + 10), PosYtmp));
+		//	currentLevel--;
+		//}
+		//else if (player->GetPosX() == WINDOW_WIDTH - PLAYER_PHYSICAL_WIDTH && currentLevel < 5)
+		//{
+		//	//transition.SetScene(currentLevel + 1, currentLevel, 10, 10);
+		//	int PosYtmp = player->GetPosY();
+		//	LoadLevel(currentLevel + 1);
+		//	player->SetPos(Point(10, PosYtmp));
+		//	currentLevel++;
+		//}
+		//else if (player->GetPosX() <= 0 && currentLevel == 1)
+		//{
+		//	// TODO: Change this in the player.cpp --> Stop animations if a wall is hit
+		//	int PosYtmp = player->GetPosY();
+		//	player->SetPos(Point(0, PosYtmp));
+		//}
 		// TODO: Add it for level 4
 
 		//ResetScreen(); // REVIEW: this wasn't commented pre-prototype
@@ -453,7 +439,7 @@ void Scene::Update()
 		CheckCollisions();
 
 		hitbox = player->GetHitbox();
-		enemies->Update(hitbox, weaponHitbox, player->score);
+		//enemies->Update(hitbox, player->score);
 		//Switch between the different debug modes: off, on (sprites & hitboxes), on (hitboxes) 
 
 		if (IsKeyPressed(KEY_G))
@@ -469,7 +455,7 @@ void Scene::Update()
 		}
 		else if (IsKeyPressed(KEY_KP_1) || IsKeyPressed(KEY_ONE))
 		{
-			transition.SetScene(1, currentLevel, 10, 10);
+			//transition.SetScene(1, currentLevel, 10, 10);
 			LoadLevel(1);
 			player->SetPos(Point(20, 150));
 			currentLevel = 1;
@@ -477,11 +463,29 @@ void Scene::Update()
 		else if (IsKeyPressed(KEY_KP_2) || IsKeyPressed(KEY_TWO))
 		{
 			//transition.SetScene(1);
-			transition.SetScene(currentLevel, 2, 10, 10);
+			//transition.SetScene(currentLevel, 2, 10, 10);
 			currentLevel = 2;
 			LoadLevel(2);
 			player->SetPos(Point(20, 150));
 		}
+	//}
+	if ((currentLevel == 2 /*|| currentLevel == 3*/) && ((timer % 150) == 0))
+	{
+		AABB player_box;
+
+		player_box = player->GetHitbox();
+		//enemy_box = enemies->GetEnemyHitBox(ZOMBIE);
+	//	enemy_box = enemies->GetEnemyHitBox(pos, EnemyType::ZOMBIE);
+
+
+		Point pos;
+		AABB hitbox, area;
+
+
+
+		hitbox = enemies->GetEnemyHitBox(pos, EnemyType::BLINKY);
+		area = level->GetSweptAreaX(hitbox);
+
 	}
 
 }
@@ -507,7 +511,7 @@ void Scene::Render()
 	}
 
 	EndMode2D();
-	if (transition.IsActive()) transition.Render();
+	/*if (transition.IsActive()) transition.Render();*/
 	RenderGUI();
 }
 void Scene::Release()
@@ -542,9 +546,9 @@ bool Scene::GameOver()
 }
 bool Scene::End()
 {
-	if (player->GetEndGame() == true)
+	if (player->GetGameEnd() == true)
 	{
-		player->SetEndGame(false);
+		player->SetGameEnd(false);
 		return true;
 	}
 }
@@ -601,5 +605,6 @@ void Scene::RenderGUI() const
 {
 	//Temporal approach
 	DrawText(TextFormat("SCORE : %d", player->GetScore()), 5, 5, 8, LIGHTGRAY);
-	font->Draw(157, 9, TextFormat("%02d", currentLevel));
+	font->Draw(157, 9, TextFormat("%06d", currentLevel));
+	font->Draw(57, 9, TextFormat("%06d", player->GetScore())); // TODO convert numbers into division of screen
 }

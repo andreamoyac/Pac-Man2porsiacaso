@@ -37,6 +37,10 @@ public:
 
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
+    Sound& operator[](int index)
+    {
+        return sounds[index];
+    }
 
 private:
     ResourceManager();

@@ -14,9 +14,9 @@ public:
 
 	void addEnemy(const Point& pos, EnemyType type, const AABB& area, Look look);
 
-	AABB GetEnemyHitBox(const Point& pos) const;
+	AABB GetEnemyHitBox(const Point& pos,EnemyType type) const;
 
-	void Update(const AABB& player_hitbox, const AABB& enemy_hitbox, int& score);
+	void Update(const AABB& player_hitbox, const AABB& weapon_hitbox, int& score);
 	//Draw enemies
 	void Draw() const;
 
