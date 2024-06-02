@@ -77,6 +77,7 @@ public:
 	bool TestCollisionWallRight(const AABB& box) const;
 	bool TestCollisionWallUp(const AABB& box) const;
 	bool TestCollisionWallDown(const AABB& box) const;
+
 	
 	//When debug mode we want to see the grid lines
 	void RenderGrid() const;
@@ -97,7 +98,7 @@ private:
 	int size, width, height;
 	
 	//Dictionary of tile frames
-	std::unordered_map<int, Rectangle> dict_rect;
+	std::unordered_map<int, Rectangle> dict_rect;s
 
 	//Sprite *fruits;
 	//Sprite* lifes;

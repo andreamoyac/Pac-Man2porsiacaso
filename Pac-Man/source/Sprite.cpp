@@ -40,6 +40,7 @@ void Sprite::SetAnimation(int id)
         current_anim = id;
         current_frame = 0;
         current_delay = animations[current_anim].delay;
+        completed_animation = false;
     }
 }
 int Sprite::GetAnimation()
@@ -74,7 +75,7 @@ void Sprite::RepeatOnceMore()
 void Sprite::Update()
 {
    // both animation modes (automatic and manual) are carry out with animation delay
-    if (current_delay >= 0)
+    if (current_delay > 0)
     {
         current_delay--;
         if (current_delay == 0)
@@ -142,8 +143,13 @@ void Sprite::DrawTint(int x, int y, const Color& col) const
 {
     if (current_anim >= 0 && current_anim < animations.size())
     {
-        Rectangle rect = animations[current_anim].frames[current_frame];
-        DrawTextureRec(*img, rect, { (float)x, (float)y }, col);
+        
+        int n = animations[current_anim].frames.size();
+        if (current_frame >= 0 && current_frame < n)
+        {
+            Rectangle rect = animations[current_anim].frames[current_frame];
+            DrawTextureRec(*img, rect, { (float)x, (float)y }, col);
+        }
     }
 }
 void Sprite::Release()

@@ -100,11 +100,12 @@ AppStatus Game::LoadResources()
     GameOverPacman = LoadMusicStream("Sound/Music/Pacman_Game_over.ogg");
     ThemePacman = LoadMusicStream("Sound/Music/Pacman_theme_OGG.ogg");
     ThemePacman.looping = true;
-    SetMusicVolume(ThemePacman, 0.5);
+    SetMusicVolume(ThemePacman, 0);
 
 
     return AppStatus::OK;
 }
+
 AppStatus Game::BeginPlay()
 {
     scene = new Scene();
@@ -134,23 +135,23 @@ AppStatus Game::Update()
 {
     //Check if user attempts to close the window, either by clicking the close button or by pressing Alt+F4
     if(WindowShouldClose()) return AppStatus::QUIT;
-    //if (transition.IsActive())
-    //{
-    //    GameState prev_frame = state;
-    //    //state = transition.Update();
+    if (transition.IsActive())
+    {
+       GameState prev_frame = state;
+        state = transition.Update();
 
-    //    //Start and finish delayed due to the fading transition
-    //    if (prev_frame == GameState::MAIN_MENU && state == GameState::PLAYING)
-    //    {
-    //        if (BeginPlay() != AppStatus::OK) return AppStatus::ERROR;
-    //    }
-    //    else if (prev_frame == GameState::PLAYING && state == GameState::MAIN_MENU)
-    //    {
-    //        FinishPlay();
-    //    }
-    //}
-    //else
-    //{
+       //Start and finish delayed due to the fading transition
+        if (prev_frame == GameState::MAIN_MENU && state == GameState::PLAYING)
+        {
+           if (BeginPlay() != AppStatus::OK) return AppStatus::ERROR;
+        }
+        else if (prev_frame == GameState::PLAYING && state == GameState::MAIN_MENU)
+        {
+            FinishPlay();
+        }
+    }
+    else
+    {
         switch (state)
         {
         case GameState::CREDITS:
@@ -184,26 +185,26 @@ AppStatus Game::Update()
 
                 //StopMusicStream(Ost2PacMan);
             }
-            /*else if (IsKeyPressed(KEY_F2))
+            else if (IsKeyPressed(KEY_F2))
             {
                 state = GameState::GAME_OVER;
-                StopMusicStream(Ost2PacMan);
+                StopMusicStream(ThemePacman);
             }
             else if (scene->GameOver() == true)
             {
                 state = GameState::GAME_OVER;
-                StopMusicStream(Ost2PacMan);
+                StopMusicStream(ThemePacman);
             }
             else if (IsKeyPressed(KEY_F3))
             {
                 state = GameState::ENDING;
-                StopMusicStream(Ost2PacMan);
+                StopMusicStream(ThemePacman);
             }
-            else if (scene->GameEnd() == true)
+            else if (scene->End() == true)
             {
                 state = GameState::ENDING;
-                StopMusicStream(Ost2PacMan);
-            }*/
+                StopMusicStream(ThemePacman);
+            }
             else
             {
                 //Game logic
@@ -226,11 +227,11 @@ AppStatus Game::Update()
             }
             break;
         }
-        return AppStatus::OK;
+
     }
 
- /*   return AppStatus::OK;
-}*/
+   return AppStatus::OK;
+}
 void Game::Render()
 {
     //Draw everything in the render texture, note this will not be rendered on screen, yet

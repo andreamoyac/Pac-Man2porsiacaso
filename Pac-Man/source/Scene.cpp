@@ -60,7 +60,7 @@ Scene::~Scene()
 AppStatus Scene::Init()
 {
 	//Create player
-	player = new Player({ 0,0 }, StateP::IDLE, Look::UP);
+	player = new Player({ 0,0 }, StateP::IDLE, Look::LEFT);
 	if (player == nullptr)
 	{
 		LOG("Failed to allocate memory for Player");
@@ -349,7 +349,7 @@ AppStatus Scene::LoadLevel(int stage)
 			{
 				pos.x += (ENEMY_FRAME_SIZE - ENEMY_PHYSICAL_WIDTH) / 2;
 				hitbox = enemies->GetEnemyHitBox(pos, EnemyType::BLINKY);
-				area = level->GetSweptAreaX(hitbox); //?
+				//area = level->GetSweptAreaX(hitbox); //?
 				enemies->addEnemy(pos, EnemyType::BLINKY, area, Look::DOWN);
 			}
 			else if (tile == Tile::ENERGIZER)
@@ -370,7 +370,7 @@ AppStatus Scene::LoadLevel(int stage)
 	InteractableLevel->ClearObjEntPos();
 
 
-	//level->Load(InteractableMap, LEVEL_WIDTH, LEVEL_HEIGHT); ??
+	//level->Load(InteractableMap, LEVEL_WIDTH, LEVEL_HEIGHT); 
 	delete[] InteractableMap;
 	delete[] map;
 
@@ -394,10 +394,10 @@ void Scene::Update()
 	Point p1, p2;
 	AABB hitbox;
 
-	//if (transition.IsActive())
-	//{
-	//	transition.Update();
-	//}
+	if (transition.IsActive())
+	{
+		transition.Update();
+	}
 	/*else {*/
 		//if (player->GetPosX() == WINDOW_WIDTH - PLAYER_PHYSICAL_WIDTH && currentLevel == 3)
 		//{
@@ -484,7 +484,7 @@ void Scene::Update()
 
 
 		hitbox = enemies->GetEnemyHitBox(pos, EnemyType::BLINKY);
-		area = level->GetSweptAreaX(hitbox);
+		//area = level->GetSweptAreaX(hitbox);
 
 	}
 

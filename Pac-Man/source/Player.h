@@ -91,9 +91,8 @@ private:
 	void Death();
 	
 
-	void finishAnimation();
 
-	StateP state;
+	StateP stateP;
 	Look look;
 
 	TileMap *map;

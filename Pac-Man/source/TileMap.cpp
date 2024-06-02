@@ -178,7 +178,6 @@ bool TileMap::IsTileEntity(Tile tile) const
 //bool TileMap::IsTileSolid(Tile tile) const
 //{
 //	//return (Tile::SOLID_FIRST <= tile && tile <= Tile::SOLID_LAST);
-//	return (Tile::SOLID_FIRST <= tile && tile <= Tile::SOLID_LAST || (tile == Tile::BLOCK_PLATFORM_1 || tile == Tile::BLOCK_PLATFORM_2 || tile == Tile::BLOCK_PLATFORM_3));
 //}
 bool TileMap::IsTileSolid(Tile tile) const
 {
@@ -194,11 +193,11 @@ bool TileMap::TestCollisionWallRight(const AABB& box) const
 }
 bool TileMap::TestCollisionWallUp(const AABB& box) const
 {
-	return CollisionY(box.pos, box.height); //creo q hay q cambiar esto
+	return CollisionY(box.pos, box.width); //creo q hay q cambiar esto
 }
 bool TileMap::TestCollisionWallDown(const AABB& box) const
 {
-	return CollisionY(box.pos + Point(box.width - 1, 0), box.height); //creo q hay q cambiar esto
+	return CollisionY(box.pos + Point(box.height - 1, 0), box.width); //creo q hay q cambiar esto
 }
 
 bool TileMap::CollisionX(const Point& p, int distance) const
@@ -240,59 +239,59 @@ bool TileMap::CollisionY(const Point& p, int distance) const
 	}
 	return false;
 }
-AABB TileMap::GetSweptAreaX(const AABB& hitbox) const //no undertiendo
-{
-	AABB box;
-	int column, x, y, y0, y1;
-	bool collision;
-
-	box.pos.y = hitbox.pos.y;
-	box.height = hitbox.height;
-
-	column = hitbox.pos.x / TILE_SIZE;
-	y0 = hitbox.pos.y / TILE_SIZE;
-	y1 = (hitbox.pos.y + hitbox.height - 1) / TILE_SIZE;
-
-	//Compute left tile index
-	collision = false;
-	x = column - 1;
-	while (!collision && x >= 0)
-	{
-		//Iterate over the tiles within the vertical range
-		for (y = y0; y <= y1; ++y)
-		{
-			//One solid tile is sufficient
-			if (IsTileSolid(GetTileIndex(x, y)))
-			{
-				collision = true;
-				break;
-			}
-		}
-		if (!collision) x--;
-	}
-	box.pos.x = (x + 1) * TILE_SIZE;
-
-	//Compute right tile index
-	collision = false;
-	x = column + 1;
-	while (!collision && x < LEVEL_WIDTH)
-	{
-		//Iterate over the tiles within the vertical range
-		for (y = y0; y <= y1; ++y)
-		{
-			//One solid tile is sufficient
-			if (IsTileSolid(GetTileIndex(x, y)))
-			{
-				collision = true;
-				break;
-			}
-		}
-		if (!collision) x++;
-	}
-	box.width = x * TILE_SIZE - box.pos.x;
-
-	return box;
-}
+//AABB TileMap::GetSweptAreaX(const AABB& hitbox) const //no undertiendo
+//{
+//	AABB box;
+//	int column, x, y, y0, y1;
+//	bool collision;
+//
+//	box.pos.y = hitbox.pos.y;
+//	box.height = hitbox.height;
+//
+//	column = hitbox.pos.x / TILE_SIZE;
+//	y0 = hitbox.pos.y / TILE_SIZE;
+//	y1 = (hitbox.pos.y + hitbox.height - 1) / TILE_SIZE;
+//
+//	//Compute left tile index
+//	collision = false;
+//	x = column - 1;
+//	while (!collision && x >= 0)
+//	{
+//		//Iterate over the tiles within the vertical range
+//		for (y = y0; y <= y1; ++y)
+//		{
+//			//One solid tile is sufficient
+//			if (IsTileSolid(GetTileIndex(x, y)))
+//			{
+//				collision = true;
+//				break;
+//			}
+//		}
+//		if (!collision) x--;
+//	}
+//	box.pos.x = (x + 1) * TILE_SIZE;
+//
+//	//Compute right tile index
+//	collision = false;
+//	x = column + 1;
+//	while (!collision && x < LEVEL_WIDTH)
+//	{
+//		//Iterate over the tiles within the vertical range
+//		for (y = y0; y <= y1; ++y)
+//		{
+//			//One solid tile is sufficient
+//			if (IsTileSolid(GetTileIndex(x, y)))
+//			{
+//				collision = true;
+//				break;
+//			}
+//		}
+//		if (!collision) x++;
+//	}
+//	box.width = x * TILE_SIZE - box.pos.x;
+//
+//	return box;
+//}
 void TileMap::Render()
 {
 	Tile tile;

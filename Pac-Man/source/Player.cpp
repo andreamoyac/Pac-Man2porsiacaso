@@ -8,7 +8,7 @@
 Player::Player(const Point& p, StateP s, Look view) :
 	Entity(p, PLAYER_PHYSICAL_WIDTH, PLAYER_PHYSICAL_HEIGHT, PLAYER_FRAME_SIZE, PLAYER_FRAME_SIZE)
 {
-	state = s;
+	stateP = s;
 	look = view;
 	map = nullptr;
 	lives = 3;
@@ -24,7 +24,7 @@ Player::~Player()
 AppStatus Player::Initialise()
 {
 	int i;
-	const int n = PLAYER_FRAME_SIZE;
+	const int n = PLAYER_FRAME_SIZE*2;
 
 	ResourceManager& data = ResourceManager::Instance();
 	if (data.LoadTexture(Resource::IMG_PLAYER, "images/player.png") != AppStatus::OK)
@@ -43,36 +43,39 @@ AppStatus Player::Initialise()
 	sprite->SetNumberAnimations((int)PlayerAnim::NUM_ANIMATIONS);
 	
 	sprite->SetAnimationDelay((int)PlayerAnim::IDLE_UP, ANIM_DELAY);
-	sprite->AddKeyFrame((int)PlayerAnim::IDLE_UP, { 2*n, 6*n, 2*n, 2*n });
+	sprite->AddKeyFrame((int)PlayerAnim::IDLE_UP, { n, 3*n, n, n });
+	
 	sprite->SetAnimationDelay((int)PlayerAnim::IDLE_DOWN, ANIM_DELAY);
-	sprite->AddKeyFrame((int)PlayerAnim::IDLE_DOWN, { 2 * n, 4*n, 2*n, 2*n });
+	sprite->AddKeyFrame((int)PlayerAnim::IDLE_DOWN, { n, 0, n, n });
+	
 	sprite->SetAnimationDelay((int)PlayerAnim::IDLE_LEFT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)PlayerAnim::IDLE_LEFT, { 2 * n, 2 * n, 2 * n, 2 * n });
+	sprite->AddKeyFrame((int)PlayerAnim::IDLE_LEFT, { n, n, n, n });
+	
 	sprite->SetAnimationDelay((int)PlayerAnim::IDLE_RIGHT, ANIM_DELAY);
-	sprite->AddKeyFrame((int)PlayerAnim::IDLE_RIGHT, { 2 * n, 4 * n, 2 * n, 2 * n });
+	sprite->AddKeyFrame((int)PlayerAnim::IDLE_RIGHT, { n, 2 * n,  n, n });
 
 	sprite->SetAnimationDelay((int)PlayerAnim::WALKING_RIGHT, ANIM_DELAY);
-	for (i = 0; i < 3; ++i)
-		sprite->AddKeyFrame((int)PlayerAnim::WALKING_RIGHT, { (float)(2*i)*n, 4*n, 2*n, 2*n });
+	for (i = 1; i < 3; ++i)
+		sprite->AddKeyFrame((int)PlayerAnim::WALKING_RIGHT, { 0, (float)i * n, n, n });
+	sprite->AddKeyFrame((int)PlayerAnim::WALKING_RIGHT, { 0, (float)0 * n, n, n });
 	sprite->SetAnimationDelay((int)PlayerAnim::WALKING_LEFT, ANIM_DELAY);
 	for (i = 0; i < 3; ++i)
-		sprite->AddKeyFrame((int)PlayerAnim::WALKING_LEFT, { (float)(2*i)*n, 2*n, 2*n, 2*n });
+		sprite->AddKeyFrame((int)PlayerAnim::WALKING_LEFT, { (float)i*n, n, n, n });
 	sprite->SetAnimationDelay((int)PlayerAnim::WALKING_UP, ANIM_DELAY);
-	for (i = 0; i < 3; ++i)
-		sprite->AddKeyFrame((int)PlayerAnim::WALKING_UP, { (float)(2*i)*n, 6*n, 2*n, 2*n });
+	for (i = 0; i < 2; ++i)
+		sprite->AddKeyFrame((int)PlayerAnim::WALKING_UP, { (float)i*n, n, n, n });
 	sprite->SetAnimationDelay((int)PlayerAnim::WALKING_DOWN, ANIM_DELAY);
-	for (i = 0; i < 3; ++i)
-		sprite->AddKeyFrame((int)PlayerAnim::WALKING_DOWN, { (float)(2*i)*n, 0, 2*n, 2*n });
+	for (i = 0; i < 2; ++i)
+		sprite->AddKeyFrame((int)PlayerAnim::WALKING_DOWN, { (float)i*n, 0, n, n });
 
 	
 
-
 	sprite->SetAnimationDelay((int)PlayerAnim::DEATH, ANIM_DELAY);
-	for (i = 0; i < 4; ++i)
+	for (i = 0; i < 11; ++i)
 		sprite->AddKeyFrame((int)PlayerAnim::DEATH, { (float)i * n, 6 * n, n, n });
 
 	
-
+	sprite->SetAnimation((int)PlayerAnim::IDLE_LEFT);
 	return AppStatus::OK;
 }
 
@@ -146,6 +149,22 @@ void Player::SetTileMap(TileMap* tilemap)
 {
 	map = tilemap;
 }
+bool Player::GetPlayerLookingRight() const
+{
+	return look == Look::RIGHT;
+}
+bool Player::GetPlayerLookingLeft() const
+{
+	return look == Look::LEFT;
+}
+bool Player::GetPlayerLookingUp() const
+{
+	return look == Look::UP;
+}
+bool Player::GetPlayerLookingDown() const
+{
+	return look == Look::DOWN;
+}
 bool Player::IsLookingRight() const
 {
 	return look == Look::RIGHT;
@@ -183,7 +202,7 @@ PlayerAnim Player::GetAnimation()
 void Player::Stop()
 {
 	dir = { 0,0 };
-	state = StateP::IDLE;
+	stateP = StateP::IDLE;
 	if (IsLookingRight())	SetAnimation((int)PlayerAnim::IDLE_RIGHT);
 	else if(IsLookingLeft()) SetAnimation((int)PlayerAnim::IDLE_LEFT);
 	else if (IsLookingDown()) SetAnimation((int)PlayerAnim::IDLE_DOWN);
@@ -191,32 +210,32 @@ void Player::Stop()
 }
 void Player::StartWalkingLeft()
 {
-	state = StateP::WALKING;
+	stateP = StateP::WALKING;
 	look = Look::LEFT;
 	SetAnimation((int)PlayerAnim::WALKING_LEFT);
 }
 void Player::StartWalkingRight()
 {
-	state = StateP::WALKING;
+	stateP = StateP::WALKING;
 	look = Look::RIGHT;
 	SetAnimation((int)PlayerAnim::WALKING_RIGHT);
 }
 void Player::StartWalkingUp()
 {
-	state = StateP::WALKING;
+	stateP = StateP::WALKING;
 	look = Look::UP;
 	SetAnimation((int)PlayerAnim::WALKING_UP);
 }
 void Player::StartWalkingDown()
 {
-	state = StateP::WALKING;
+	stateP = StateP::WALKING;
 	look = Look::DOWN;
 	SetAnimation((int)PlayerAnim::WALKING_DOWN);
 }
 void Player::Death()
 {
 	Dead = true;
-	state = StateP::DEAD;
+	stateP = StateP::DEAD;
 	lives--;
 	
 	SetAnimation((int)PlayerAnim::DEATH);
@@ -243,41 +262,51 @@ void Player::Death()
 void Player::ChangeAnimRight()
 {
 	look = Look::RIGHT;
-	switch (state)
+	switch (stateP)
 	{
-		case StateP::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_RIGHT);    break; 
+		case StateP::IDLE:SetAnimation((int)PlayerAnim::IDLE_RIGHT);    break;
 		case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_RIGHT); break;
 	}
 }
 void Player::ChangeAnimLeft()
 {
 	look = Look::LEFT;
-	switch (state)
+	switch (stateP)
 	{
-		case StateP::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_LEFT);    break;
+		case StateP::IDLE:SetAnimation((int)PlayerAnim::IDLE_LEFT);    break;
 		case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_LEFT); break;
 	}
 }
 void Player::ChangeAnimUp()
 {
 	look = Look::UP;
-	switch (state)
+	switch (stateP)
 	{
-	case StateP::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_UP);    break;
-	case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_UP); break;
+		case StateP::IDLE:SetAnimation((int)PlayerAnim::IDLE_UP);    break;
+		case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_UP); break;
 	}
 }
 void Player::ChangeAnimDown()
 {
 	look = Look::DOWN;
-	switch (state)
+	switch (stateP)
 	{
-	case StateP::IDLE:	 SetAnimation((int)PlayerAnim::IDLE_DOWN);    break;
-	case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_DOWN); break;
+		case StateP::IDLE:SetAnimation((int)PlayerAnim::IDLE_DOWN);    break;
+		case StateP::WALKING: SetAnimation((int)PlayerAnim::WALKING_DOWN); break;
 	}
 }
 void Player::Update()
 {
+
+	currentFrame++;
+	currentFrame %= 100;
+	if (isInvincible == true)
+	{
+		if (currentFrame == fstFrame)
+		{
+			isInvincible = false;
+		}
+	}
 	//Player doesn't use the "Entity::Update() { pos += dir; }" default behaviour.
 	//Instead, uses an independent behaviour for each axis.
 	MoveX();
@@ -285,17 +314,27 @@ void Player::Update()
 
 	Sprite* sprite = dynamic_cast<Sprite*>(render);
 	sprite->Update();
+	if (sprite->GetAnimationFinished())
+	{
+		sprite->SetAnimationFinished(false);
+		stateP = StateP::IDLE;
+		Stop();
+
+	}
 }
 void Player::MoveX()
 {
 	AABB box;
 	int prev_x = pos.x;
 
-
-	if (IsKeyDown(KEY_LEFT))
+	if (IsKeyPressed(KEY_P))
+	{
+		Death();
+	}
+	if ((IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) && !IsKeyDown(KEY_RIGHT) && Dead == false)
 	{
 		pos.x += -PLAYER_SPEED;
-		if (state == StateP::IDLE) StartWalkingLeft();
+		if (stateP == StateP::IDLE) StartWalkingLeft();
 		else
 		{
 			if (IsLookingRight()) ChangeAnimLeft();
@@ -305,13 +344,13 @@ void Player::MoveX()
 		if (map->TestCollisionWallLeft(box))
 		{
 			pos.x = prev_x;
-			if (state == StateP::WALKING) Stop();
+			if (stateP == StateP::WALKING) Stop();
 		}
 	}
-	else if (IsKeyDown(KEY_RIGHT))
+	else if ((IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) && !IsKeyDown(KEY_LEFT) && Dead == false)
 	{
 		pos.x += PLAYER_SPEED;
-		if (state == StateP::IDLE) StartWalkingRight();
+		if (stateP == StateP::IDLE) StartWalkingRight();
 		else
 		{
 			if (IsLookingLeft()) ChangeAnimRight();
@@ -321,34 +360,14 @@ void Player::MoveX()
 		if (map->TestCollisionWallRight(box))
 		{
 			pos.x = prev_x;
-			if (state == StateP::WALKING) Stop();
+			if (stateP == StateP::WALKING) Stop();
 		}
 	}
 	else
 	{
-		if (state == StateP::WALKING) Stop();
-	}
-	/*pos.x += PLAYER_SPEED;
-	if (state == StateP::IDLE)
-		StartWalkingRight();
-	else if ((IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) && Dead == false && state != StateP::WALKING)
-	{
-	pos.x += PLAYER_SPEED;
-	if (state == State::IDLE)
-		StartWalkingRight();
-	else if (state == State::CROUCHING) StartWalkingRight();
-	else
-	{
-		if (IsLookingLeft()) ChangeAnimRight();
+		if (stateP == StateP::WALKING) Stop();
 	}
 
-	box = GetHitbox();
-	if (map->TestCollisionWallRight(box))
-	{
-		pos.x = prev_x;
-		if (state == State::WALKING) Stop();
-	}
-	}*/
 }
 void Player::MoveY()
 {
@@ -356,10 +375,10 @@ void Player::MoveY()
 	int prev_y = pos.y;
 
 
-	if (IsKeyDown(KEY_UP))
+	if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) && !IsKeyDown(KEY_DOWN) && Dead == false)
 	{
 		pos.y += -PLAYER_SPEED;
-		if (state == StateP::IDLE) StartWalkingUp();
+		if (stateP == StateP::IDLE) StartWalkingUp();
 		else
 		{
 			if (IsLookingDown()) ChangeAnimUp();
@@ -369,13 +388,13 @@ void Player::MoveY()
 		if (map->TestCollisionWallUp(box))
 		{
 			pos.y = prev_y;
-			if (state == StateP::WALKING) Stop();
+			if (stateP == StateP::WALKING) Stop();
 		}
 	}
-	else if (IsKeyDown(KEY_DOWN))
+	else if ((IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) && !IsKeyDown(KEY_UP) && Dead == false)
 	{
 		pos.y += PLAYER_SPEED;
-		if (state == StateP::IDLE) StartWalkingDown();
+		if (stateP == StateP::IDLE) StartWalkingDown();
 		else
 		{
 			if (IsLookingUp()) ChangeAnimDown();
@@ -385,12 +404,12 @@ void Player::MoveY()
 		if (map->TestCollisionWallDown(box))
 		{
 			pos.y = prev_y;
-			if (state == StateP::WALKING) Stop();
+			if (stateP == StateP::WALKING) Stop();
 		}
 	}
 	else
 	{
-		if (state == StateP::WALKING) Stop();
+		if (stateP == StateP::WALKING) Stop();
 	}
 		
 	}
