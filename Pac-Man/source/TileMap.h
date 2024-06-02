@@ -98,7 +98,7 @@ private:
 	int size, width, height;
 	
 	//Dictionary of tile frames
-	std::unordered_map<int, Rectangle> dict_rect;s
+	std::unordered_map<int, Rectangle> dict_rect;
 
 	//Sprite *fruits;
 	//Sprite* lifes;
